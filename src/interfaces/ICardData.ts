@@ -4,5 +4,6 @@ export interface ICardData {
   artworkTypeTitle: string;
   dateDisplay: string;
   imageUrl: string;
+  imagePlaceholder: string;
   id: number;
 }

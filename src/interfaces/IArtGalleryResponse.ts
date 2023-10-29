@@ -155,9 +155,50 @@ export interface IArtGalleryResponsePagination {
   next_url: string;
 }
 
-export interface IArtGalleryResponse {
+export interface IArtGalleryResponseAll {
   config: IArtGalleryResponseConfig;
   data: Array<IArtGalleryArtworkModel>;
   info: IArtGalleryResponseInfo;
   pagination: IArtGalleryResponsePagination;
+}
+
+export interface IArtGallerySearchDataDefault {
+  _score: number;
+  thumbnail: {
+    alt_text: string;
+    width: number;
+    lqip: string;
+    height: number;
+  };
+  api_model: string;
+  is_boosted: boolean;
+  api_link: string;
+  id: number;
+  title: string;
+  image_id: string;
+  timestamp: string;
+}
+
+export interface IArtGallerySearchData {
+  _score: number;
+  thumbnail: {
+    alt_text: string;
+    width: number;
+    lqip: string;
+    height: number;
+  };
+  id: number;
+  title: string;
+  image_id: string;
+  artist_display: string;
+  artwork_type_title: string;
+  date_display: string;
+}
+
+export interface IArtGalleryResponseSearch {
+  preference: object | null;
+  pagination: IArtGalleryResponsePagination;
+  data: Array<IArtGallerySearchData>;
+  info: IArtGalleryResponseInfo;
+  config: IArtGalleryResponseConfig;
 }
