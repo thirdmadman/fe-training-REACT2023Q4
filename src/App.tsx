@@ -7,12 +7,11 @@ import { API_URL } from './constants';
 import { ICardData } from './interfaces/ICardData';
 
 interface IAppState {
-  count: number;
   data: Array<ICardData>;
 }
 
 export class App extends React.Component<object, IAppState> {
-  state: IAppState = { count: 0, data: [] };
+  state: IAppState = { data: [] };
   artGalleryService = new ArtGalleryService(API_URL);
 
   constructor(props: object) {
@@ -70,13 +69,12 @@ export class App extends React.Component<object, IAppState> {
   }
 
   render() {
-    const { count, data } = this.state;
+    const { data } = this.state;
 
     return (
       <>
         <div className="bg-white min-h-screen relative">
           <Header onSearchEvent={(s: string) => this.searchInArtGallery(s)}/>
-          {count}
           <main className="my-8">
             <div className="container mx-auto px-6">
               <CardsList listName="All artwork" cardsList={data} />
