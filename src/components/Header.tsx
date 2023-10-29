@@ -7,16 +7,18 @@ interface IHeaderProps {
 
 interface IHeaderState {
   search: string;
+  isError: boolean;
 }
 export class Header extends React.Component<IHeaderProps, IHeaderState> {
   state: IHeaderState = {
     search: '',
+    isError: false,
   };
 
   render() {
-    const throwError = () => {
-      throw new Error('Not implemented');
-    };
+    if (this.state.isError) {
+      throw new Error();
+    }
 
     return (
       <header>
@@ -28,9 +30,9 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
             <button
               type="button"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={throwError}
+              onClick={() => this.setState({ isError: true })}
             >
-              Throw Error
+              Throw Error {}
             </button>
           </div>
           <div className="flex space-between mt-6 justify-center gap-5">
@@ -55,6 +57,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
                 type="text"
                 placeholder="Search"
                 onChange={(e) => this.setState({ search: e.target.value })}
+                value={this.state.search}
               />
             </div>
             <button

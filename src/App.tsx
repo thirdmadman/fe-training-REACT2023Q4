@@ -33,7 +33,7 @@ export class App extends React.Component<object, IAppState> {
         imageUrl: `${imagesApiUrl}/${el.image_id}${imagesApiUrlParams}`,
         imagePlaceholder: el.thumbnail.lqip,
         id: el.id,
-      }
+      };
       return cardData;
     });
 
@@ -58,7 +58,7 @@ export class App extends React.Component<object, IAppState> {
         imageUrl: `${imagesApiUrl}/${el.image_id}${imagesApiUrlParams}`,
         imagePlaceholder: el.thumbnail.lqip,
         id: el.id,
-      }
+      };
       return cardData;
     });
 
@@ -70,11 +70,10 @@ export class App extends React.Component<object, IAppState> {
 
   render() {
     const { data } = this.state;
-
     return (
       <>
         <div className="bg-white min-h-screen relative">
-          <Header onSearchEvent={(s: string) => this.searchInArtGallery(s)}/>
+          <Header onSearchEvent={(s: string) => this.searchInArtGallery(s)} />
           <main className="my-8">
             <div className="container mx-auto px-6">
               <CardsList listName="All artwork" cardsList={data} />
