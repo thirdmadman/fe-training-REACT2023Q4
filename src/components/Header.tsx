@@ -14,13 +14,24 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
   };
 
   render() {
+    const throwError = () => {
+      throw new Error('Not implemented');
+    };
+
     return (
       <header>
         <div className="container mx-auto px-6 py-3">
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-center">
             <div className="w-full text-gray-700 md:text-center text-2xl font-semibold">
               {APP_TITLE}
             </div>
+            <button
+              type="button"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+              onClick={throwError}
+            >
+              Throw Error
+            </button>
           </div>
           <div className="flex space-between mt-6 justify-center gap-5">
             <div className="relative max-w-lg w-full">
