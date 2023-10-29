@@ -4,7 +4,7 @@ import { APP_TITLE } from "../constants";
 export class Footer extends React.Component {
   render() {
     return (
-      <footer className="bg-gray-200 -bottom-7 absolute min-w-full">
+      <footer className="bg-gray-200">
         <div className="container mx-auto px-6 py-3 flex justify-between items-center">
           <a
             href="#"
