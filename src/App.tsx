@@ -1,4 +1,7 @@
 import React from 'react';
+import { Header } from './components/Header';
+import { Footer } from './components/Footer';
+import { CardsList } from './components/CardsList';
 
 interface IAppState {
   count: number;
@@ -17,18 +20,16 @@ export class App extends React.Component<object, IAppState> {
 
     return (
       <>
-        <h1>Vite + React</h1>
-        <div className="card">
-          <button className='bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded' onClick={() => this.setState({ count: count + 1 })}>
-            count is {count}
-          </button>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test HMR
-          </p>
+        <div className="bg-white min-h-screen relative">
+          <Header />
+          {count}
+          <main className="my-8">
+            <div className="container mx-auto px-6">
+              <CardsList />
+            </div>
+          </main>
+          <Footer />
         </div>
-        <p className="read-the-docs">
-          Click on the Vite and React logos to learn more
-        </p>
       </>
     );
   }
