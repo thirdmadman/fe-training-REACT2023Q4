@@ -10,9 +10,9 @@ export class Card extends React.Component<ICardData> {
       <div className="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
         <div
           className="h-56 w-full bg-cover overflow-hidden relative"
-          style={{
+          style={imagePlaceholder ? {
             backgroundImage: `url("${imagePlaceholder}")`,
-          }}
+          } : undefined}
         >
           <img className='' src={imageUrl} alt={artistDisplay}/>
           <button className="absolute right-3 top-3 p-2 rounded-full bg-blue-600 text-white hover:bg-blue-500 focus:outline-none focus:bg-blue-500">

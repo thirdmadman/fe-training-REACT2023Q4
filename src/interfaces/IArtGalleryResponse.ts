@@ -15,7 +15,7 @@ export interface IArtGalleryArtworkModel {
     width: number;
     height: number;
     alt_text: string;
-  };
+  } | null;
   main_reference_number: string;
   has_not_been_viewed_much: false;
   boost_rank: null;
@@ -169,7 +169,7 @@ export interface IArtGallerySearchDataDefault {
     width: number;
     lqip: string;
     height: number;
-  };
+  } | null;
   api_model: string;
   is_boosted: boolean;
   api_link: string;
