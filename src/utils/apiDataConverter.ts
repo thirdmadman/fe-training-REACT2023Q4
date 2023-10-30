@@ -1,7 +1,12 @@
-import { IArtGalleryResponseAll, IArtGalleryResponseSearch } from "../interfaces/IArtGalleryResponse";
-import { ICardData } from "../interfaces/ICardData";
+import {
+  IArtGalleryResponseAll,
+  IArtGalleryResponseSearch,
+} from '../interfaces/IArtGalleryResponse';
+import { ICardData } from '../interfaces/ICardData';
 
-export function convertArtGalleryResponseToCards(response: IArtGalleryResponseAll | IArtGalleryResponseSearch) {
+export function convertArtGalleryResponseToCards(
+  response: IArtGalleryResponseAll | IArtGalleryResponseSearch
+) {
   const imagesApiUrl = response.config.iiif_url;
   const imagesApiUrlParams = '/full/843,/0/default.jpg';
 

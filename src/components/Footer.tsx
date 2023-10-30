@@ -1,5 +1,5 @@
-import React from "react";
-import { APP_TITLE } from "../constants";
+import React from 'react';
+import { APP_TITLE } from '../constants';
 
 export class Footer extends React.Component {
   render() {

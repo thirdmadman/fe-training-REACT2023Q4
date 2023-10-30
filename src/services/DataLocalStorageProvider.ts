@@ -1,4 +1,7 @@
-import { LOCAL_STORAGE_CONFIGS_VERSION, LOCAL_STORAGE_ITEM_NAME } from '../constants';
+import {
+  LOCAL_STORAGE_CONFIGS_VERSION,
+  LOCAL_STORAGE_ITEM_NAME,
+} from '../constants';
 import { ILocalConfigs } from '../interfaces/ILocalConfigs';
 import { IUserConfigs } from '../interfaces/IUserConfigs';
 
@@ -8,11 +11,16 @@ class DataLocalStorageProvider {
   static localStorageItemName = LOCAL_STORAGE_ITEM_NAME;
 
   public static setData(data: ILocalConfigs) {
-    localStorage.setItem(DataLocalStorageProvider.localStorageItemName, JSON.stringify(data));
+    localStorage.setItem(
+      DataLocalStorageProvider.localStorageItemName,
+      JSON.stringify(data)
+    );
   }
 
   public static isNotEmpty() {
-    const localStorageData = localStorage.getItem(DataLocalStorageProvider.localStorageItemName);
+    const localStorageData = localStorage.getItem(
+      DataLocalStorageProvider.localStorageItemName
+    );
 
     if (localStorageData && localStorageData[0] === '{') {
       const dataILocalConfigs = JSON.parse(localStorageData) as ILocalConfigs;
@@ -31,10 +39,15 @@ class DataLocalStorageProvider {
 
   public static getData() {
     if (DataLocalStorageProvider.isNotEmpty()) {
-      const localStorageData = localStorage.getItem(DataLocalStorageProvider.localStorageItemName);
+      const localStorageData = localStorage.getItem(
+        DataLocalStorageProvider.localStorageItemName
+      );
       if (localStorageData) {
         const dataILocalConfigs = JSON.parse(localStorageData) as ILocalConfigs;
-        if (dataILocalConfigs.version && dataILocalConfigs.version === configVersion) {
+        if (
+          dataILocalConfigs.version &&
+          dataILocalConfigs.version === configVersion
+        ) {
           return dataILocalConfigs;
         }
       }

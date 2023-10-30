@@ -1,9 +1,9 @@
-import DataLocalStorageProvider from "../services/DataLocalStorageProvider";
+import DataLocalStorageProvider from '../services/DataLocalStorageProvider';
 
 export function saveQueryToLocalStorage(query: string | null) {
   const localStorageState = DataLocalStorageProvider.getData();
   localStorageState.userConfigs.lastSearchQuery = query;
-  
+
   DataLocalStorageProvider.setData(localStorageState);
 }
 

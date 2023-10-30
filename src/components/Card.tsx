@@ -19,8 +19,8 @@ export class Card extends React.Component<ICardData> {
           style={
             imagePlaceholder
               ? {
-                  backgroundImage: `url("${imagePlaceholder}")`,
-                }
+                backgroundImage: `url("${imagePlaceholder}")`,
+              }
               : undefined
           }
         >
