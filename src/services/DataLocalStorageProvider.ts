@@ -47,7 +47,7 @@ class DataLocalStorageProvider {
 
   private static generateData() {
     const userConfigs = {
-      lastSearchQuery: '',
+      lastSearchQuery: null,
     } as IUserConfigs;
 
     const configs = {
