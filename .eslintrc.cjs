@@ -41,6 +41,10 @@ module.exports = {
     '@typescript-eslint/no-var-requires': 'off',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
+    indent: ['error', 2],
+    quotes: ['error', 'single'],
+    'max-len': [0, 80, 2, { ignoreUrls: true }],
+    'arrow-parens': ['error', 'always'],
   },
   settings: {
     react: {
