@@ -6,7 +6,8 @@ import { ArtGalleryService } from '../services/ArtGalleryService';
 import { API_URL } from '../constants';
 import { ICardData } from '../interfaces/ICardData';
 import { convertArtGalleryResponseToCards } from '../utils/apiDataConverter';
-import { IArtGalleryResponseAll, IArtGalleryResponseSearch } from '../interfaces/IArtGalleryResponse';
+import { IArtGalleryResponseSearch } from '../interfaces/IArtGalleryResponse';
+import { getQueryFormLocalStorage, saveQueryToLocalStorage } from '../utils/querySaveTools';
 
 interface IMainPageState {
   data: Array<ICardData>;
@@ -21,11 +22,16 @@ export class MainPage extends React.Component<object, IMainPageState> {
   }
 
   async searchInArtGallery(query: string | null = null) {
-    let response: IArtGalleryResponseAll | IArtGalleryResponseSearch | null = null;
+    let response: IArtGalleryResponseSearch | null = null;
 
     if (query === null) {
       response = await this.artGalleryService.getAll();
     } else {
+      if (query === '') {
+        saveQueryToLocalStorage(null);
+      } else {
+        saveQueryToLocalStorage(query);
+      }
       response = await this.artGalleryService.getByQueryString(query);
     }
     const cardsData = convertArtGalleryResponseToCards(response);
@@ -33,7 +39,13 @@ export class MainPage extends React.Component<object, IMainPageState> {
   }
 
   async componentDidMount() {
-    await this.searchInArtGallery();
+    const query = getQueryFormLocalStorage();
+
+    await this.searchInArtGallery(query);
+  }
+
+  searchClear() {
+
   }
 
   render() {
