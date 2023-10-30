@@ -59,6 +59,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
                 onChange={(e) => this.setState({ search: e.target.value })}
                 value={this.state.search}
               />
+              <button className='absolute text-xl inset-y-0 right-0 pr-4 flex items-center' onClick={() => this.setState({search: ''})}>x</button>
             </div>
             <button
               type="button"
