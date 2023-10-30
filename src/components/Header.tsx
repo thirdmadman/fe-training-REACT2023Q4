@@ -1,24 +1,32 @@
 import React from 'react';
 import { APP_TITLE } from '../constants';
+import { getQueryFormLocalStorage } from '../utils/querySaveTools';
 
 interface IHeaderProps {
   onSearchEvent: (search: string) => void;
 }
 
 interface IHeaderState {
-  search: string;
+  search: string | null;
   isError: boolean;
 }
 export class Header extends React.Component<IHeaderProps, IHeaderState> {
   state: IHeaderState = {
-    search: '',
+    search: null,
     isError: false,
   };
+
+  async componentDidMount() {
+    const query = getQueryFormLocalStorage();
+    this.setState({ search: query });
+  }
 
   render() {
     if (this.state.isError) {
       throw new Error();
     }
+
+    const searchString = this.state.search || '';
 
     return (
       <header>
@@ -56,16 +64,17 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
                 className="w-full border rounded-md pl-10 pr-4 py-2 focus:border-blue-500 focus:outline-none focus:shadow-outline"
                 type="text"
                 placeholder="Search"
-                onChange={(e) => this.setState({ search: e.target.value })}
-                value={this.state.search}
+                onInput={(e) =>
+                  this.setState({ search: e.currentTarget.value })
+                }
+                value={searchString}
               />
               <button
                 className="absolute text-xl inset-y-0 right-0 pr-4 flex items-center"
-                onClick={() =>
-                  this.setState({ search: '' }, () =>
-                    this.props.onSearchEvent(this.state.search)
-                  )
-                }
+                onClick={() => {
+                  this.setState({ search: null });
+                  this.props.onSearchEvent('');
+                }}
               >
                 x
               </button>
@@ -73,7 +82,7 @@ export class Header extends React.Component<IHeaderProps, IHeaderState> {
             <button
               type="button"
               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-              onClick={() => this.props.onSearchEvent(this.state.search)}
+              onClick={() => this.props.onSearchEvent(searchString)}
             >
               Search!
             </button>
