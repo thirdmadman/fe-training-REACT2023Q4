@@ -26,7 +26,7 @@ export class MainPage extends React.Component<object, IMainPageState> {
 
   async searchInArtGallery(query: string | null = null) {
     let response: IArtGalleryResponseSearch | null = null;
-
+    this.setState({ data: [] });
     if (query === null) {
       response = await this.artGalleryService.getAll();
     } else {
