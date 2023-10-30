@@ -1,3 +1,3 @@
 export interface IUserConfigs {
-  lastSearchQuery: string;
+  lastSearchQuery: string | null;
 }
