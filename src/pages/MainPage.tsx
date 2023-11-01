@@ -12,9 +12,10 @@ import {
   saveQueryToLocalStorage,
 } from '../utils/querySaveTools';
 import { useSearchParams } from 'react-router-dom';
+import { IPaginatedArray } from '../interfaces/IPaginatedArray';
 
 export function MainPage() {
-  const [data, setData] = useState<Array<ICardData>>([]);
+  const [data, setData] = useState<IPaginatedArray<ICardData> | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -26,12 +27,16 @@ export function MainPage() {
       const artGalleryService = new ArtGalleryService(API_URL);
 
       let response: IArtGalleryResponseSearch | null = null;
-      setData([]);
+      setData(null);
 
       if (query === null || query === '') {
-        response = await artGalleryService.getAll();
+        response = await artGalleryService.getAll(page);
         saveQueryToLocalStorage(null);
-        setSearchParams({});
+        if (page > 1) {
+          setSearchParams({ page: page.toString() });
+        } else {
+          setSearchParams({});
+        }
       } else {
         saveQueryToLocalStorage(query);
         setSearchParams({ search: query, page: page.toString() });

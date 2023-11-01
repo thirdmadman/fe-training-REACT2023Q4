@@ -27,8 +27,8 @@ export class ArtGalleryService {
     return (await fetchRequest.json()) as IArtGalleryResponseSearch;
   }
 
-  async getAll() {
-    return this.getArtGalleryData();
+  async getAll(page: number) {
+    return this.getArtGalleryData(null, page);
   }
 
   async getByQueryString(queryString: string, page: number) {
