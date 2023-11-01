@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { APP_TITLE } from '../constants';
-import { getQueryFormLocalStorage } from '../utils/querySaveTools';
+import { SearchBar } from './SearchBar';
 
 interface IHeaderProps {
-  onSearchEvent: (search: string) => void;
+  value: string;
+  onValueChanged: (value: string) => void;
+  onSearchEvent: (value: string) => void;
 }
 
 export function Header(props: IHeaderProps) {
-  const [search, setSearch] = useState<string | null>(null);
-
   const [isError, setIsError] = useState(false);
-
-  useEffect(() => {
-    const query = getQueryFormLocalStorage();
-    setSearch(query);
-  }, []);
 
   if (isError) {
     throw new Error();
   }
-
-  const searchString = search || '';
 
   return (
     <header>
@@ -37,48 +30,11 @@ export function Header(props: IHeaderProps) {
             Throw Error {}
           </button>
         </div>
-        <div className="flex space-between mt-6 justify-center gap-5">
-          <div className="relative max-w-lg w-full">
-            <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
-              <svg
-                className="h-5 w-5 text-gray-500"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M21 21L15 15M17 10C17 13.866 13.866 17 10 17C6.13401 17 3 13.866 3 10C3 6.13401 6.13401 3 10 3C13.866 3 17 6.13401 17 10Z"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </span>
-            <input
-              className="w-full border rounded-md pl-10 pr-4 py-2 focus:border-blue-500 focus:outline-none focus:shadow-outline"
-              type="text"
-              placeholder="Search"
-              onInput={(e) => setSearch(e.currentTarget.value)}
-              value={searchString}
-            />
-            <button
-              className="absolute text-xl inset-y-0 right-0 pr-4 flex items-center"
-              onClick={() => {
-                setSearch(null);
-                props.onSearchEvent('');
-              }}
-            >
-              x
-            </button>
-          </div>
-          <button
-            type="button"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-            onClick={() => props.onSearchEvent(searchString)}
-          >
-            Search!
-          </button>
-        </div>
+        <SearchBar
+          value={props.value}
+          onValueChanged={props.onValueChanged}
+          onSearchEvent={props.onSearchEvent}
+        />
       </div>
     </header>
   );

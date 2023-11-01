@@ -12,13 +12,16 @@ export class ArtGalleryService {
     this.apiUrl = apiUrl;
   }
 
-  private async getArtGalleryData(queryString: string | null = null) {
+  private async getArtGalleryData(
+    queryString: string | null = null,
+    page: number = 1
+  ) {
     const queryUrlString = queryString
       ? `&q=${window.encodeURIComponent(queryString)}`
       : '';
 
     const fetchRequest = await window.fetch(
-      `${this.apiUrl}/search?${PUBLIC_DOMAIN}${queryUrlString}&${QUERY_FIELDS}&${QUERY_LIMIT}`
+      `${this.apiUrl}/search?${PUBLIC_DOMAIN}${queryUrlString}&${QUERY_FIELDS}&${QUERY_LIMIT}&page=${page}`
     );
 
     return (await fetchRequest.json()) as IArtGalleryResponseSearch;
@@ -28,7 +31,7 @@ export class ArtGalleryService {
     return this.getArtGalleryData();
   }
 
-  async getByQueryString(queryString: string) {
-    return this.getArtGalleryData(queryString);
+  async getByQueryString(queryString: string, page: number) {
+    return this.getArtGalleryData(queryString, page);
   }
 }

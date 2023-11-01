@@ -11,43 +11,83 @@ import {
   getQueryFormLocalStorage,
   saveQueryToLocalStorage,
 } from '../utils/querySaveTools';
+import { useSearchParams } from 'react-router-dom';
 
 export function MainPage() {
   const [data, setData] = useState<Array<ICardData>>([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const loadCardsData = useCallback(async (query: string | null = null) => {
-    const artGalleryService = new ArtGalleryService(API_URL);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const searchString = searchParams.get('search');
+  const searchPage = searchParams.get('page');
 
-    let response: IArtGalleryResponseSearch | null = null;
-    setData([]);
-    if (query === null) {
-      response = await artGalleryService.getAll();
-    } else {
-      if (query === '') {
+  const loadCardsData = useCallback(
+    async (query: string | null = null, page: number = 1) => {
+      const artGalleryService = new ArtGalleryService(API_URL);
+
+      let response: IArtGalleryResponseSearch | null = null;
+      setData([]);
+
+      if (query === null || query === '') {
+        response = await artGalleryService.getAll();
         saveQueryToLocalStorage(null);
+        setSearchParams({});
       } else {
         saveQueryToLocalStorage(query);
+        setSearchParams({ search: query, page: page.toString() });
+        response = await artGalleryService.getByQueryString(query, page);
       }
-      response = await artGalleryService.getByQueryString(query);
-    }
-    return convertArtGalleryResponseToCards(response);
-  }, []);
 
-  const searchInArtGallery = async (query: string | null = null) => {
+      return convertArtGalleryResponseToCards(response);
+    },
+    [setSearchParams]
+  );
+
+  const searchInArtGallery = async (query: string) => {
     const cardsData = await loadCardsData(query);
     setData(cardsData);
   };
 
   useEffect(() => {
-    const query = getQueryFormLocalStorage();
-    loadCardsData(query)
+    const queryFromLocalStorage = getQueryFormLocalStorage();
+
+    let query = searchString;
+
+    let page = 1;
+
+    if (!query && queryFromLocalStorage) {
+      query = queryFromLocalStorage;
+    }
+
+    if (searchPage !== null && searchPage.length > 0) {
+      page = Number(searchPage);
+    }
+
+    if (page < 1) {
+      page = 1;
+    }
+
+    setSearchQuery(query || '');
+
+    loadCardsData(query, page)
       .then((data) => setData(data))
       .catch((e) => console.error(e));
-  }, [loadCardsData]);
+  }, [loadCardsData, searchString, searchPage]);
+
+  const handleSearchQueryChange = (query: string) => {
+    if (query === searchQuery) {
+      return;
+    }
+    setSearchQuery(query);
+  };
 
   return (
     <>
-      <Header onSearchEvent={(s: string) => searchInArtGallery(s)} />
+      <Header
+        value={searchQuery}
+        onSearchEvent={(val) => searchInArtGallery(val)}
+        onValueChanged={(val) => handleSearchQueryChange(val)}
+      />
       <main className="my-8">
         <div className="container mx-auto px-6">
           <CardsList listName="All artwork" cardsList={data} />
