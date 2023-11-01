@@ -28,8 +28,6 @@ export function Pagination(props: IPaginationProps) {
     if (totalPages < paginationMaxPagesVisible) {
       startPage = minPagesNumber;
     }
-
-    console.log('startPage :>> ', startPage);
   } else if (
     currentPage >= minPagesNumber &&
     currentPage <= minPagesNumber + Math.floor(paginationMaxPagesVisible / 2)
@@ -40,8 +38,6 @@ export function Pagination(props: IPaginationProps) {
     if (totalPages < startPage + paginationMaxPagesVisible) {
       startPage = totalPages;
     }
-
-    console.log('endPage :>> ', endPage);
   } else if (
     currentPage > minPagesNumber + Math.floor(paginationMaxPagesVisible / 2) &&
     currentPage < totalPages - Math.floor(paginationMaxPagesVisible / 2)
@@ -50,14 +46,15 @@ export function Pagination(props: IPaginationProps) {
     endPage = currentPage + Math.floor(paginationMaxPagesVisible / 2) + 1;
   }
 
-  console.log('endPage - startPage :>> ', endPage - startPage);
-
   const paginationArray = Array.from(
     { length: endPage - startPage },
     (_, i) => startPage + i
   );
 
-  console.log('paginationArray :>> ', paginationArray);
+  const paginationNextPage =
+    currentPage + 1 >= totalPages ? null : currentPage + 1;
+  const paginationPreviousPage =
+    currentPage - 1 <= minPagesNumber ? null : currentPage - 1;
 
   const getPaginationButton = (pageNumber: number) => {
     const buttonNormalClasses =
@@ -79,21 +76,21 @@ export function Pagination(props: IPaginationProps) {
     <nav className="flex justify-center mt-8">
       <ul className="inline-flex -space-x-px text-base h-10">
         <li>
-          <a
-            href="#"
+          <Link
+            to={paginationPreviousPage ? `?page=${paginationPreviousPage}` : ''}
             className="flex items-center justify-center px-4 h-10 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             Previous
-          </a>
+          </Link>
         </li>
         {paginationArray.map((el) => getPaginationButton(el))}
         <li>
-          <a
-            href="#"
+          <Link
+            to={paginationNextPage ? `?page=${paginationNextPage}` : ''}
             className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             Next
-          </a>
+          </Link>
         </li>
       </ul>
     </nav>
