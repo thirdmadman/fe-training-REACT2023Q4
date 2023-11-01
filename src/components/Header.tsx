@@ -58,10 +58,7 @@ export function Header(props: IHeaderProps) {
               className="w-full border rounded-md pl-10 pr-4 py-2 focus:border-blue-500 focus:outline-none focus:shadow-outline"
               type="text"
               placeholder="Search"
-              onInput={(e) => {
-                setSearch(e.currentTarget.value);
-                console.log('e :>> ', e.currentTarget.value);
-              }}
+              onInput={(e) => setSearch(e.currentTarget.value)}
               value={searchString}
             />
             <button
