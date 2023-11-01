@@ -4,3 +4,5 @@ export const APP_TITLE = `thirdmadman's ${API_NAME} page`;
 
 export const LOCAL_STORAGE_CONFIGS_VERSION = 1;
 export const LOCAL_STORAGE_ITEM_NAME = 'thirdmadman-art-gallery';
+
+export const ROUTE_MAIN = '/';

@@ -47,15 +47,13 @@ export function MainPage() {
 
   return (
     <>
-      <div className="bg-white min-h-screen relative">
-        <Header onSearchEvent={(s: string) => searchInArtGallery(s)} />
-        <main className="my-8">
-          <div className="container mx-auto px-6">
-            <CardsList listName="All artwork" cardsList={data} />
-          </div>
-        </main>
-        <Footer />
-      </div>
+      <Header onSearchEvent={(s: string) => searchInArtGallery(s)} />
+      <main className="my-8">
+        <div className="container mx-auto px-6">
+          <CardsList listName="All artwork" cardsList={data} />
+        </div>
+      </main>
+      <Footer />
     </>
   );
 }
