@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { CardsList } from '../components/CardsList';
@@ -12,54 +12,50 @@ import {
   saveQueryToLocalStorage,
 } from '../utils/querySaveTools';
 
-interface IMainPageState {
-  data: Array<ICardData>;
-}
+export function MainPage() {
+  const [data, setData] = useState<Array<ICardData>>([]);
 
-export class MainPage extends React.Component<object, IMainPageState> {
-  state: IMainPageState = { data: [] };
-  artGalleryService = new ArtGalleryService(API_URL);
+  const loadCardsData = useCallback(async (query: string | null = null) => {
+    const artGalleryService = new ArtGalleryService(API_URL);
 
-  constructor(props: object) {
-    super(props);
-  }
-
-  async searchInArtGallery(query: string | null = null) {
     let response: IArtGalleryResponseSearch | null = null;
-    this.setState({ data: [] });
+    setData([]);
     if (query === null) {
-      response = await this.artGalleryService.getAll();
+      response = await artGalleryService.getAll();
     } else {
       if (query === '') {
         saveQueryToLocalStorage(null);
       } else {
         saveQueryToLocalStorage(query);
       }
-      response = await this.artGalleryService.getByQueryString(query);
+      response = await artGalleryService.getByQueryString(query);
     }
-    const cardsData = convertArtGalleryResponseToCards(response);
-    this.setState({ data: cardsData });
-  }
+    return convertArtGalleryResponseToCards(response);
+  }, []);
 
-  async componentDidMount() {
+  const searchInArtGallery = async (query: string | null = null) => {
+    const cardsData = await loadCardsData(query);
+    setData(cardsData);
+  };
+
+  useEffect(() => {
     const query = getQueryFormLocalStorage();
-    await this.searchInArtGallery(query);
-  }
+    loadCardsData(query)
+      .then((data) => setData(data))
+      .catch((e) => console.error(e));
+  }, [loadCardsData]);
 
-  render() {
-    const { data } = this.state;
-    return (
-      <>
-        <div className="bg-white min-h-screen relative">
-          <Header onSearchEvent={(s: string) => this.searchInArtGallery(s)} />
-          <main className="my-8">
-            <div className="container mx-auto px-6">
-              <CardsList listName="All artwork" cardsList={data} />
-            </div>
-          </main>
-          <Footer />
-        </div>
-      </>
-    );
-  }
+  return (
+    <>
+      <div className="bg-white min-h-screen relative">
+        <Header onSearchEvent={(s: string) => searchInArtGallery(s)} />
+        <main className="my-8">
+          <div className="container mx-auto px-6">
+            <CardsList listName="All artwork" cardsList={data} />
+          </div>
+        </main>
+        <Footer />
+      </div>
+    </>
+  );
 }
