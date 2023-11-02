@@ -89,7 +89,7 @@ export interface IArtGalleryArtworkModel {
   category_titles: Array<string>;
   term_titles: Array<string>;
   style_id: null;
-  style_title: null;
+  style_title: string | null;
   alt_style_ids: [];
   style_ids: [];
   style_titles: [];
@@ -199,6 +199,12 @@ export interface IArtGalleryResponseSearch {
   preference: object | null;
   pagination: IArtGalleryResponsePagination;
   data: Array<IArtGallerySearchData>;
+  info: IArtGalleryResponseInfo;
+  config: IArtGalleryResponseConfig;
+}
+
+export interface IArtGalleryResponseGetOne {
+  data: IArtGalleryArtworkModel;
   info: IArtGalleryResponseInfo;
   config: IArtGalleryResponseConfig;
 }

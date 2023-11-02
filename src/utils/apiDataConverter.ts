@@ -1,8 +1,10 @@
 import {
   IArtGalleryResponseAll,
+  IArtGalleryResponseGetOne,
   IArtGalleryResponseSearch,
 } from '../interfaces/IArtGalleryResponse';
 import { ICardData } from '../interfaces/ICardData';
+import { IDetailedCardData } from '../interfaces/IDetailedCardData';
 import { IPaginatedArray } from '../interfaces/IPaginatedArray';
 
 export function convertArtGalleryResponseToCards(
@@ -33,4 +35,25 @@ export function convertArtGalleryResponseToCards(
   };
 
   return paginatedArray;
+}
+
+export function convertArtGalleryResponseGetOneToCard(
+  response: IArtGalleryResponseGetOne
+) {
+  const imagesApiUrl = response.config.iiif_url;
+  const imagesApiUrlParams = '/full/843,/0/default.jpg';
+
+  const cardData: IDetailedCardData = {
+    title: response.data.title,
+    artistDisplay: response.data.artist_display,
+    artworkTypeTitle: response.data.artwork_type_title,
+    dateDisplay: response.data.date_display,
+    imageUrl: `${imagesApiUrl}/${response.data.image_id}${imagesApiUrlParams}`,
+    imagePlaceholder: response.data.thumbnail?.lqip || null,
+    placeOfOrigin: response.data.place_of_origin,
+    styleTitle: response.data.style_title,
+    id: response.data.id,
+  };
+
+  return cardData;
 }

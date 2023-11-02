@@ -1,3 +1,4 @@
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ICardData } from '../interfaces/ICardData';
 
 export function Card(props: ICardData) {
@@ -8,14 +9,32 @@ export function Card(props: ICardData) {
     dateDisplay,
     imageUrl,
     imagePlaceholder,
+    id,
   } = props;
 
-  const openImageInNewTab = () => {
+  const navigate = useNavigate();
+
+  const [searchParams] = useSearchParams();
+
+  const openDetails = () => {
+    navigate({
+      pathname: `/details/${id}`,
+      search: searchParams.toString(),
+    });
+  };
+
+  const openImageInNewTab = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.stopPropagation();
     window.open(imageUrl, '_blank');
   };
 
   return (
-    <div className="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden">
+    <div
+      className="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden"
+      onClick={openDetails}
+    >
       <div
         className="h-56 w-full bg-cover overflow-hidden relative"
         style={

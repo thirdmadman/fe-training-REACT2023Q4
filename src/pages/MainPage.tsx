@@ -5,7 +5,7 @@ import { CardsList } from '../components/CardsList';
 import { CARDS_COUNT_PER_PAGE } from '../constants';
 import { ICardData } from '../interfaces/ICardData';
 import { getQueryFormLocalStorage } from '../utils/querySaveTools';
-import { useSearchParams } from 'react-router-dom';
+import { Outlet, useSearchParams } from 'react-router-dom';
 import { IPaginatedArray } from '../interfaces/IPaginatedArray';
 import { loadCardsData } from '../utils/loadCardsData';
 
@@ -93,6 +93,7 @@ export function MainPage() {
 
   return (
     <>
+      <Outlet />
       <Header
         value={searchQuery}
         onSearchEvent={(val) => searchInArtGallery(val)}

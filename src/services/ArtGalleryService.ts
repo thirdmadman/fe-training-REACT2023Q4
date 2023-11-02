@@ -1,5 +1,8 @@
 import { CARDS_COUNT_PER_PAGE } from '../constants';
-import { IArtGalleryResponseSearch } from '../interfaces/IArtGalleryResponse';
+import {
+  IArtGalleryResponseGetOne,
+  IArtGalleryResponseSearch,
+} from '../interfaces/IArtGalleryResponse';
 
 const PUBLIC_DOMAIN = 'query[term][is_public_domain]=true';
 const QUERY_FIELDS =
@@ -34,5 +37,11 @@ export class ArtGalleryService {
 
   async getByQueryString(queryString: string, page: number, limit: number) {
     return this.getArtGalleryData(queryString, page, limit);
+  }
+
+  async getOneById(id: number) {
+    const fetchRequest = await window.fetch(`${this.apiUrl}/${id}`);
+
+    return (await fetchRequest.json()) as IArtGalleryResponseGetOne;
   }
 }
