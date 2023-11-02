@@ -7,10 +7,19 @@ import { Pagination } from './Pagination';
 export interface ICardsListProps {
   listName: string;
   cardsList: IPaginatedArray<ICardData> | null;
+  currentItemsPerPage: number;
+  onNewValueSelect: (value: number) => void;
+  onSetPage: (value: number) => void;
 }
 
 export function CardsList(props: ICardsListProps) {
-  const { listName, cardsList } = props;
+  const {
+    listName,
+    cardsList,
+    currentItemsPerPage,
+    onNewValueSelect,
+    onSetPage,
+  } = props;
 
   const showCards = (paginatedArray: IPaginatedArray<ICardData>) => (
     <>
@@ -24,6 +33,9 @@ export function CardsList(props: ICardsListProps) {
         currentPage={paginatedArray.currentPage}
         size={paginatedArray.size}
         baseLink=""
+        currentItemsPerPage={currentItemsPerPage}
+        onNewValueSelect={onNewValueSelect}
+        onSetPage={onSetPage}
       />
     </>
   );

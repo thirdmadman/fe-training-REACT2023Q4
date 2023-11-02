@@ -1,14 +1,24 @@
-import { Link } from 'react-router-dom';
+import { ItemsPerPageSelect } from './ItemsPerPageSelect';
 
 interface IPaginationProps {
   pageSize: number;
   currentPage: number;
   size: number;
   baseLink: string;
+  currentItemsPerPage: number;
+  onNewValueSelect: (value: number) => void;
+  onSetPage: (value: number) => void;
 }
 
 export function Pagination(props: IPaginationProps) {
-  const { pageSize, currentPage, size } = props;
+  const {
+    pageSize,
+    currentPage,
+    size,
+    currentItemsPerPage,
+    onNewValueSelect,
+    onSetPage,
+  } = props;
 
   const paginationMaxPagesVisible = 5;
 
@@ -63,36 +73,43 @@ export function Pagination(props: IPaginationProps) {
       'flex items-center justify-center px-4 h-10 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white';
     const buttonClasses =
       pageNumber === currentPage ? buttonActiveClasses : buttonNormalClasses;
+
     return (
       <li key={pageNumber}>
-        <Link to={`?page=${pageNumber}`} className={buttonClasses}>
+        <div className={buttonClasses} onClick={() => onSetPage(pageNumber)}>
           {pageNumber}
-        </Link>
+        </div>
       </li>
     );
   };
 
   return (
-    <nav className="flex justify-center mt-8">
+    <nav className="flex justify-center mt-8 gap-3">
       <ul className="inline-flex -space-x-px text-base h-10">
         <li>
-          <Link
-            to={paginationPreviousPage ? `?page=${paginationPreviousPage}` : ''}
+          <div
+            onClick={() =>
+              paginationPreviousPage && onSetPage(paginationPreviousPage)
+            }
             className="flex items-center justify-center px-4 h-10 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             Previous
-          </Link>
+          </div>
         </li>
         {paginationArray.map((el) => getPaginationButton(el))}
         <li>
-          <Link
-            to={paginationNextPage ? `?page=${paginationNextPage}` : ''}
+          <div
+            onClick={() => paginationNextPage && onSetPage(paginationNextPage)}
             className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             Next
-          </Link>
+          </div>
         </li>
       </ul>
+      <ItemsPerPageSelect
+        currentItemsPerPage={currentItemsPerPage}
+        onNewValueSelect={onNewValueSelect}
+      />
     </nav>
   );
 }

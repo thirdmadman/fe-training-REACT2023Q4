@@ -17,19 +17,23 @@ import { IPaginatedArray } from '../interfaces/IPaginatedArray';
 export function MainPage() {
   const [data, setData] = useState<IPaginatedArray<ICardData> | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchPage, setSearchPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(CARDS_COUNT_PER_PAGE);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const searchString = searchParams.get('search');
-  const searchPage = searchParams.get('page');
+  const searchPageQuery = searchParams.get('page');
   const searchCount = searchParams.get('count');
 
   const loadCardsData = useCallback(
-    async (query: string | null = null, page: number = 1) => {
+    async (
+      query: string | null = null,
+      page: number = 1,
+      cardsPerPageCount: number = CARDS_COUNT_PER_PAGE
+    ) => {
       const artGalleryService = new ArtGalleryService(API_URL);
 
       let response: IArtGalleryResponseSearch | null = null;
-      setData(null);
 
       let pagesParam = {};
       let cardsPerPageParam = {};
@@ -39,12 +43,12 @@ export function MainPage() {
         pagesParam = { page: page.toString() };
       }
 
-      if (cardsPerPage !== CARDS_COUNT_PER_PAGE) {
-        cardsPerPageParam = { count: cardsPerPage.toString() };
+      if (cardsPerPageCount !== CARDS_COUNT_PER_PAGE) {
+        cardsPerPageParam = { count: cardsPerPageCount.toString() };
       }
 
       if (query === null || query === '') {
-        response = await artGalleryService.getAll(page, cardsPerPage);
+        response = await artGalleryService.getAll(page, cardsPerPageCount);
         saveQueryToLocalStorage(null);
       } else {
         saveQueryToLocalStorage(query);
@@ -54,19 +58,22 @@ export function MainPage() {
         response = await artGalleryService.getByQueryString(
           query,
           page,
-          cardsPerPage
+          cardsPerPageCount
         );
       }
-
-      setSearchParams({ ...queryParam, ...pagesParam, ...cardsPerPageParam });
-      return convertArtGalleryResponseToCards(response);
+      return {
+        cards: convertArtGalleryResponseToCards(response),
+        searchParams: { ...queryParam, ...pagesParam, ...cardsPerPageParam },
+      };
     },
-    [setSearchParams, cardsPerPage]
+    []
   );
 
   const searchInArtGallery = async (query: string) => {
+    setData(null);
     const cardsData = await loadCardsData(query);
-    setData(cardsData);
+    setSearchParams(cardsData.searchParams);
+    setData(cardsData.cards);
   };
 
   useEffect(() => {
@@ -76,34 +83,61 @@ export function MainPage() {
 
     let page = 1;
 
+    let count = CARDS_COUNT_PER_PAGE;
+
     if (!query && queryFromLocalStorage) {
       query = queryFromLocalStorage;
     }
 
-    if (searchPage !== null && searchPage.length > 0) {
-      page = Number(searchPage);
+    if (searchPageQuery !== null && searchPageQuery.length > 0) {
+      page = Number(searchPageQuery);
     }
 
     if (page < 1) {
       page = 1;
     }
 
-    if (searchCount && Number(searchCount) != cardsPerPage) {
-      setCardsPerPage(Number(searchCount));
+    if (searchCount && searchCount.length > 0 && Number(searchCount) > 0) {
+      count = Number(searchCount);
     }
 
     setSearchQuery(query || '');
+    setSearchPage(page);
+    setCardsPerPage(count);
 
-    loadCardsData(query, page)
-      .then((data) => setData(data))
+    loadCardsData(query, page, count)
+      .then((data) => setData(data.cards))
       .catch((e) => console.error(e));
-  }, [loadCardsData, searchString, searchPage, searchCount, cardsPerPage]);
+  }, [loadCardsData, searchString, searchPageQuery, searchCount, cardsPerPage]);
 
   const handleSearchQueryChange = (query: string) => {
     if (query === searchQuery) {
       return;
     }
     setSearchQuery(query);
+  };
+
+  const handleSetPage = (number: number) => {
+    if (number === searchPage) {
+      return;
+    }
+
+    setData(null);
+
+    searchParams.set('page', number.toString());
+    setSearchParams(searchParams);
+  };
+
+  const handleSetNewItemsPerPage = (number: number) => {
+    if (number === cardsPerPage) {
+      return;
+    }
+
+    setData(null);
+
+    searchParams.set('count', number.toString());
+    searchParams.set('page', '1');
+    setSearchParams(searchParams);
   };
 
   return (
@@ -115,7 +149,13 @@ export function MainPage() {
       />
       <main className="my-8">
         <div className="container mx-auto px-6">
-          <CardsList listName="All artwork" cardsList={data} />
+          <CardsList
+            listName="All artwork"
+            cardsList={data}
+            currentItemsPerPage={cardsPerPage}
+            onNewValueSelect={handleSetNewItemsPerPage}
+            onSetPage={handleSetPage}
+          />
         </div>
       </main>
       <Footer />
