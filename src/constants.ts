@@ -6,3 +6,5 @@ export const LOCAL_STORAGE_CONFIGS_VERSION = 1;
 export const LOCAL_STORAGE_ITEM_NAME = 'thirdmadman-art-gallery';
 
 export const ROUTE_MAIN = '/';
+
+export const CARDS_COUNT_PER_PAGE = 12;

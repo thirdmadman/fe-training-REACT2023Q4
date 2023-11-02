@@ -3,7 +3,7 @@ import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { CardsList } from '../components/CardsList';
 import { ArtGalleryService } from '../services/ArtGalleryService';
-import { API_URL } from '../constants';
+import { API_URL, CARDS_COUNT_PER_PAGE } from '../constants';
 import { ICardData } from '../interfaces/ICardData';
 import { convertArtGalleryResponseToCards } from '../utils/apiDataConverter';
 import { IArtGalleryResponseSearch } from '../interfaces/IArtGalleryResponse';
@@ -17,10 +17,12 @@ import { IPaginatedArray } from '../interfaces/IPaginatedArray';
 export function MainPage() {
   const [data, setData] = useState<IPaginatedArray<ICardData> | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
+  const [cardsPerPage, setCardsPerPage] = useState(CARDS_COUNT_PER_PAGE);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const searchString = searchParams.get('search');
   const searchPage = searchParams.get('page');
+  const searchCount = searchParams.get('count');
 
   const loadCardsData = useCallback(
     async (query: string | null = null, page: number = 1) => {
@@ -29,23 +31,37 @@ export function MainPage() {
       let response: IArtGalleryResponseSearch | null = null;
       setData(null);
 
-      if (query === null || query === '') {
-        response = await artGalleryService.getAll(page);
-        saveQueryToLocalStorage(null);
-        if (page > 1) {
-          setSearchParams({ page: page.toString() });
-        } else {
-          setSearchParams({});
-        }
-      } else {
-        saveQueryToLocalStorage(query);
-        setSearchParams({ search: query, page: page.toString() });
-        response = await artGalleryService.getByQueryString(query, page);
+      let pagesParam = {};
+      let cardsPerPageParam = {};
+      let queryParam = {};
+
+      if (page > 1) {
+        pagesParam = { page: page.toString() };
       }
 
+      if (cardsPerPage !== CARDS_COUNT_PER_PAGE) {
+        cardsPerPageParam = { count: cardsPerPage.toString() };
+      }
+
+      if (query === null || query === '') {
+        response = await artGalleryService.getAll(page, cardsPerPage);
+        saveQueryToLocalStorage(null);
+      } else {
+        saveQueryToLocalStorage(query);
+        queryParam = {
+          search: query,
+        };
+        response = await artGalleryService.getByQueryString(
+          query,
+          page,
+          cardsPerPage
+        );
+      }
+
+      setSearchParams({ ...queryParam, ...pagesParam, ...cardsPerPageParam });
       return convertArtGalleryResponseToCards(response);
     },
-    [setSearchParams]
+    [setSearchParams, cardsPerPage]
   );
 
   const searchInArtGallery = async (query: string) => {
@@ -72,12 +88,16 @@ export function MainPage() {
       page = 1;
     }
 
+    if (searchCount && Number(searchCount) != cardsPerPage) {
+      setCardsPerPage(Number(searchCount));
+    }
+
     setSearchQuery(query || '');
 
     loadCardsData(query, page)
       .then((data) => setData(data))
       .catch((e) => console.error(e));
-  }, [loadCardsData, searchString, searchPage]);
+  }, [loadCardsData, searchString, searchPage, searchCount, cardsPerPage]);
 
   const handleSearchQueryChange = (query: string) => {
     if (query === searchQuery) {
