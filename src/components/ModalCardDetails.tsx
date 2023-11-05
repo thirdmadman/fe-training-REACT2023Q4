@@ -33,14 +33,16 @@ export function ModalCardDetails() {
     return (
       <section className="m-5 mt-10">
         <h3 className="text-3xl">{data.title}</h3>
-        <h4 className="text-xl mt-5">Artist: {data.artistDisplay}</h4>
-        <p className="text-l mt-5">Place of origin: {data.placeOfOrigin}</p>
-        <p className="text-l mt-5">Type: {data.artworkTypeTitle}</p>
-        <p className="text-l mt-5">Style: {data.styleTitle}</p>
+        <h4 className="text-xl mt-5">Artist: {data.artistDisplay || 'none'}</h4>
+        <p className="text-l mt-5">
+          Place of origin: {data.placeOfOrigin || 'none'}
+        </p>
+        <p className="text-l mt-5">Type: {data.artworkTypeTitle || 'none'}</p>
+        <p className="text-l mt-5">Style: {data.styleTitle || 'none'}</p>
         <img
           src={data.imageUrl}
           alt={data.title}
-          className="max-w-50 mt-5"
+          className="max-h-[50vh] mt-5"
         ></img>
       </section>
     );
