@@ -1,5 +1,6 @@
 import { useRef } from 'react';
-
+import { useAppContext } from '../hooks/useAppContext';
+import { actionCreators } from '../store/actions/actionCreators';
 interface ISearchBarProps {
   value: string;
   onValueChanged: (value: string) => void;
@@ -9,14 +10,28 @@ interface ISearchBarProps {
 export function SearchBar(props: ISearchBarProps) {
   const { value, onValueChanged, onSearchEvent } = props;
 
+  const appContext = useAppContext();
+
   const clearInput = () => {
     onSearchEvent('');
   };
 
+  const actionSetSearch = (search: string) => {
+    appContext?.dispatch(actionCreators.changeSearch(search));
+  };
+
   const inputRef = useRef<HTMLInputElement>(null);
+
+  console.log(appContext);
+
+  const onValueInputChanged = (value: string) => {
+    actionSetSearch(value);
+    onValueChanged(value);
+  };
 
   return (
     <div className="flex space-between mt-6 justify-center gap-5">
+      {appContext?.state.search.searchString}
       <div className="relative max-w-lg w-full">
         <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
           <svg
@@ -37,7 +52,7 @@ export function SearchBar(props: ISearchBarProps) {
           className="w-full border rounded-md pl-10 pr-4 py-2 focus:border-blue-500 focus:outline-none focus:shadow-outline"
           type="text"
           placeholder="Search"
-          onInput={(e) => onValueChanged(e.currentTarget.value)}
+          onInput={(e) => onValueInputChanged(e.currentTarget.value)}
           value={value}
           ref={inputRef}
         />
