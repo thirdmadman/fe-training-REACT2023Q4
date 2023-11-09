@@ -12,10 +12,10 @@ export const appStateReducer = (
       ...state,
       search: { ...state.search, searchString: action.payload },
     };
-  case actionTypes.REMOVE_TODO:
-    return { ...state };
-  case actionTypes.CLEAR_ALL:
-    return { ...state };
+  case actionTypes.SET_CARDS_DATA:
+    return { ...state, cards: action.payload };
+  case actionTypes.SET_DETAILS_DATA:
+    return { ...state, details: action.payload };
   default:
     return state;
   }
