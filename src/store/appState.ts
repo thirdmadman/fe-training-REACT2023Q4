@@ -1,5 +1,6 @@
 import { ICardData } from '../interfaces/ICardData';
 import { IDetailedCardData } from '../interfaces/IDetailedCardData';
+import { IPaginatedArray } from '../interfaces/IPaginatedArray';
 
 export interface ISearchSlice {
   searchString: string;
@@ -8,15 +9,17 @@ export interface ISearchSlice {
 }
 
 export interface IDetailsSlice {
-  isOpened: false;
+  isIsError: false;
   details: IDetailedCardData | null;
 }
 
-export type TCardsSlice = Array<ICardData> | null;
-
+export interface ICardsSlice {
+  isIsError: false;
+  cards: IPaginatedArray<ICardData> | null;
+}
 export interface IAppState {
   search: ISearchSlice;
-  cards: TCardsSlice;
+  cards: ICardsSlice;
   details: IDetailsSlice;
 }
 
@@ -26,9 +29,12 @@ export const defaultAppState: IAppState = {
     paginationPage: 1,
     itemsPerPage: 12,
   },
-  cards: Array<ICardData>(),
+  cards: {
+    isIsError: false,
+    cards: null,
+  },
   details: {
-    isOpened: false,
+    isIsError: false,
     details: null,
   },
 };
