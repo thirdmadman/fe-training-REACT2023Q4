@@ -7,10 +7,10 @@ export const appStateReducer = (
   action: TAppActions
 ): IAppState => {
   switch (action.type) {
-  case actionTypes.CHANGE_SEARCH:
+  case actionTypes.SET_SEARCH_DATA:
     return {
       ...state,
-      search: { ...state.search, searchString: action.payload },
+      search: action.payload,
     };
   case actionTypes.SET_CARDS_DATA:
     return { ...state, cards: action.payload };

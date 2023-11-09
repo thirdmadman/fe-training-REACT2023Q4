@@ -1,9 +1,9 @@
-import { ICardsSlice, IDetailsSlice } from '../appState';
+import { ICardsSlice, IDetailsSlice, ISearchSlice } from '../appState';
 import { actionTypes } from './actionTypes';
 
 export const actionCreators = {
-  changeSearch: (payload: string) => {
-    return { type: actionTypes.CHANGE_SEARCH, payload };
+  setSearchData: (payload: ISearchSlice) => {
+    return { type: actionTypes.SET_SEARCH_DATA, payload };
   },
   setCardsData: (payload: ICardsSlice) => {
     return { type: actionTypes.SET_CARDS_DATA, payload };
@@ -19,4 +19,4 @@ export type TAppActions = ReturnType<
   (typeof actionCreators)[TActonCreatorsKeys]
 >;
 
-export const { changeSearch, setCardsData, setDetailsData } = actionCreators;
+export const { setSearchData, setCardsData, setDetailsData } = actionCreators;
