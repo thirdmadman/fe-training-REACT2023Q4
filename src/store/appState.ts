@@ -9,12 +9,12 @@ export interface ISearchSlice {
 }
 
 export interface IDetailsSlice {
-  isIsError: false;
+  isIsError: boolean;
   details: IDetailedCardData | null;
 }
 
 export interface ICardsSlice {
-  isIsError: false;
+  isIsError: boolean;
   cards: IPaginatedArray<ICardData> | null;
 }
 export interface IAppState {
