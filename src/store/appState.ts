@@ -1,3 +1,4 @@
+import { CARDS_COUNT_PER_PAGE } from '../constants';
 import { ICardData } from '../interfaces/ICardData';
 import { IDetailedCardData } from '../interfaces/IDetailedCardData';
 import { IPaginatedArray } from '../interfaces/IPaginatedArray';
@@ -27,7 +28,7 @@ export const defaultAppState: IAppState = {
   search: {
     searchString: '',
     paginationPage: 1,
-    itemsPerPage: 12,
+    itemsPerPage: CARDS_COUNT_PER_PAGE,
   },
   cards: {
     isIsError: false,
