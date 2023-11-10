@@ -14,7 +14,7 @@
     "preview": "vite preview",
     "prepare": "husky install",
     "test": "vitest",
-    "test:coverage": "vitest run --coverage.enabled --coverage.all",
+    "test:coverage": "vitest run --coverage",
     "test:watch": "vitest",
     "test:ui": "vitest --ui"
   },
@@ -34,6 +34,7 @@
     "react-router-dom": "^6.18.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^14.1.0",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@typescript-eslint/eslint-plugin": "^6.9.0",
