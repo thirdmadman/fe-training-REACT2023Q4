@@ -1,10 +1,11 @@
 import { LoadingSpinner } from './LoadingSpinner';
-import { IDetailedCardData } from '../interfaces/IDetailedCardData';
 import { useAppContext } from '../hooks/useAppContext';
 import { actionCloseDetails } from '../store/actions/actionCloseDetails';
 import { useParams } from 'react-router-dom';
 import { useEffect } from 'react';
 import { actionLoadDetails } from '../store/actions/actionLoadDetails';
+import { IDetailsSlice } from '../store/appState';
+import { ErrorCard } from './ErrorCard';
 
 export function ModalCardDetails() {
   const appContext = useAppContext();
@@ -22,25 +23,43 @@ export function ModalCardDetails() {
     return;
   }
 
+  const details = appContext.state.details;
+
   const closeModal = () => {
     actionCloseDetails(appContext);
   };
 
-  const displayDetails = (data: IDetailedCardData) => {
+  const showDetails = (detailsSlice: IDetailsSlice) => {
+    if (detailsSlice.isIsError) {
+      return ErrorCard(
+        'Server error',
+        'We are sorry but we are unable to show the details'
+      );
+    }
+
+    if (!detailsSlice.details) {
+      return <LoadingSpinner />;
+    }
+
+    const {
+      title,
+      artistDisplay,
+      placeOfOrigin,
+      artworkTypeTitle,
+      styleTitle,
+      imageUrl,
+    } = detailsSlice.details;
+
     return (
       <section className="m-5 mt-10">
-        <h3 className="text-3xl">{data.title}</h3>
-        <h4 className="text-xl mt-5">Artist: {data.artistDisplay || 'none'}</h4>
+        <h3 className="text-3xl">{title}</h3>
+        <h4 className="text-xl mt-5">Artist: {artistDisplay || 'none'}</h4>
         <p className="text-l mt-5">
-          Place of origin: {data.placeOfOrigin || 'none'}
+          Place of origin: {placeOfOrigin || 'none'}
         </p>
-        <p className="text-l mt-5">Type: {data.artworkTypeTitle || 'none'}</p>
-        <p className="text-l mt-5">Style: {data.styleTitle || 'none'}</p>
-        <img
-          src={data.imageUrl}
-          alt={data.title}
-          className="max-h-[50vh] mt-5"
-        ></img>
+        <p className="text-l mt-5">Type: {artworkTypeTitle || 'none'}</p>
+        <p className="text-l mt-5">Style: {styleTitle || 'none'}</p>
+        <img src={imageUrl} alt={title} className="max-h-[50vh] mt-5"></img>
       </section>
     );
   };
@@ -78,11 +97,7 @@ export function ModalCardDetails() {
             />
           </svg>
         </button>
-        {appContext.state.details.details ? (
-          displayDetails(appContext.state.details.details)
-        ) : (
-          <LoadingSpinner />
-        )}
+        {showDetails(details)}
       </div>
     </div>
   );
