@@ -5,13 +5,12 @@ import { CardsList } from '../components/CardsList';
 import { CARDS_COUNT_PER_PAGE } from '../constants';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAppContext } from '../hooks/useAppContext';
-import { actionChangeItemsPerPage } from '../store/actions/actionChangeItemsPerPage';
-import { actionChangeSearchString } from '../store/actions/actionChangeSearchString';
-import { actionChangePaginationPage } from '../store/actions/actionChangePaginationPage';
 import {
   IMainSearchParams,
   mergeSearchParams,
 } from '../utils/mergeSearchParams';
+import { getQueryFormLocalStorage } from '../utils/querySaveTools';
+import { actionChangeSearch } from '../store/actions/actionChangeSearch';
 
 export function MainPage() {
   const appContext = useAppContext();
@@ -48,9 +47,15 @@ export function MainPage() {
       return;
     }
 
-    actionChangeSearchString(searchString || '', appContext);
-    actionChangePaginationPage(convertedQueryPageNumber, appContext);
-    actionChangeItemsPerPage(convertedQueryItemsPerPage, appContext);
+    const searchQueryFromLocalStorage = getQueryFormLocalStorage();
+
+    actionChangeSearch(
+      searchString || searchQueryFromLocalStorage || '',
+      convertedQueryPageNumber,
+      convertedQueryItemsPerPage,
+      appContext
+    );
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
