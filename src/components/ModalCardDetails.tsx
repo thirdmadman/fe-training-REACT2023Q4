@@ -31,9 +31,11 @@ export function ModalCardDetails() {
 
   const showDetails = (detailsSlice: IDetailsSlice) => {
     if (detailsSlice.isIsError) {
-      return ErrorCard(
-        'Server error',
-        'We are sorry but we are unable to show the details'
+      return (
+        <ErrorCard
+          title="Server error"
+          subtitle="We are sorry but we are unable to show the details"
+        />
       );
     }
 

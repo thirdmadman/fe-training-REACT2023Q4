@@ -31,13 +31,15 @@ export function CardsList(props: ICardsListProps) {
 
   const showCardsList = (cardsSlice: ICardsSlice | null) => {
     if (!cardsSlice) {
-      return ErrorCard('Unknown error', 'This is fatal');
+      return <ErrorCard title="Unknown error" subtitle="This is fatal" />;
     }
 
     if (cardsSlice.isIsError) {
-      return ErrorCard(
-        'Server response error',
-        'We are sorry, but there some error. Try to refresh page'
+      return (
+        <ErrorCard
+          title="Server response error"
+          subtitle="We are sorry, but there some error. Try to refresh page"
+        />
       );
     }
 
@@ -46,7 +48,12 @@ export function CardsList(props: ICardsListProps) {
     }
 
     if (!cardsSlice.cards.array || cardsSlice.cards.array.length <= 0) {
-      return ErrorCard('Not found', 'Oops! We have to elements to show');
+      return (
+        <ErrorCard
+          title="Not found"
+          subtitle="Oops! We have to elements to show"
+        />
+      );
     }
 
     return showCards(cardsSlice.cards);
