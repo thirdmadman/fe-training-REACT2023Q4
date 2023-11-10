@@ -10,7 +10,7 @@ export interface ISearchSlice {
 }
 
 export interface IDetailsSlice {
-  isOpen: boolean;
+  openedCardId: number | null;
   isIsError: boolean;
   details: IDetailedCardData | null;
 }
@@ -36,8 +36,8 @@ export const defaultAppState: IAppState = {
     cards: null,
   },
   details: {
-    isOpen: false,
     isIsError: false,
+    openedCardId: null,
     details: null,
   },
 };
