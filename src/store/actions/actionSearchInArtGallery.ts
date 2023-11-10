@@ -8,14 +8,14 @@ export const actionSearchInArtGallery = (
 ) => {
   const { state, dispatch } = appContext;
   dispatch(setCardsData({ isIsError: false, cards: null }));
-  loadCardsData(query)
+  dispatch(
+    setSearchData({ ...state.search, searchString: query, paginationPage: 1 })
+  );
+  loadCardsData(query, 1, state.search.itemsPerPage)
     .then((result) => {
       dispatch(setCardsData({ isIsError: false, cards: result.cards }));
     })
     .catch(() => {
       dispatch(setCardsData({ isIsError: true, cards: null }));
-    })
-    .then(() => {
-      dispatch(setSearchData({ ...state.search, searchString: query }));
     });
 };
