@@ -1,5 +1,6 @@
-import { useNavigate, useSearchParams } from 'react-router-dom';
 import { ICardData } from '../interfaces/ICardData';
+import { actionOpenDetails } from '../store/actions/actionOpenDetails';
+import { useAppContext } from '../hooks/useAppContext';
 
 export function Card(props: ICardData) {
   const {
@@ -12,15 +13,10 @@ export function Card(props: ICardData) {
     id,
   } = props;
 
-  const navigate = useNavigate();
-
-  const [searchParams] = useSearchParams();
+  const appContext = useAppContext();
 
   const openDetails = () => {
-    navigate({
-      pathname: `/details/${id}`,
-      search: searchParams.toString(),
-    });
+    appContext && actionOpenDetails(id, appContext);
   };
 
   const openImageInNewTab = (

@@ -1,37 +1,27 @@
 import { useRef } from 'react';
 import { useAppContext } from '../hooks/useAppContext';
-import { actionCreators } from '../store/actions/actionCreators';
-interface ISearchBarProps {
-  value: string;
-  onValueChanged: (value: string) => void;
-  onSearchEvent: (value: string) => void;
-}
+import { actionSearchInArtGallery } from '../store/actions/actionSearchInArtGallery';
+import { actionChangeSearchString } from '../store/actions/actionChangeSearchString';
 
-export function SearchBar(props: ISearchBarProps) {
-  const { value, onValueChanged, onSearchEvent } = props;
-
+export function SearchBar() {
   const appContext = useAppContext();
 
   const clearInput = () => {
-    onSearchEvent('');
-  };
-
-  const actionSetSearch = (search: string) => {
-    appContext?.dispatch(actionCreators.changeSearch(search));
+    appContext && actionChangeSearchString('', appContext);
   };
 
   const inputRef = useRef<HTMLInputElement>(null);
 
-  console.log(appContext);
-
   const onValueInputChanged = (value: string) => {
-    actionSetSearch(value);
-    onValueChanged(value);
+    appContext && actionChangeSearchString(value, appContext);
+  };
+
+  const onSearchFired = (value: string) => {
+    appContext && actionSearchInArtGallery(value, appContext);
   };
 
   return (
     <div className="flex space-between mt-6 justify-center gap-5">
-      {appContext?.state.search.searchString}
       <div className="relative max-w-lg w-full">
         <span className="absolute inset-y-0 left-0 pl-3 flex items-center">
           <svg
@@ -53,7 +43,7 @@ export function SearchBar(props: ISearchBarProps) {
           type="text"
           placeholder="Search"
           onInput={(e) => onValueInputChanged(e.currentTarget.value)}
-          value={value}
+          value={appContext?.state.search.searchString}
           ref={inputRef}
         />
         <button
@@ -66,9 +56,7 @@ export function SearchBar(props: ISearchBarProps) {
       <button
         type="button"
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => {
-          onSearchEvent(inputRef.current?.value || '');
-        }}
+        onClick={() => onSearchFired(inputRef.current?.value || '')}
       >
         Search!
       </button>

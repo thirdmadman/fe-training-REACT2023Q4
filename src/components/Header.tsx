@@ -2,13 +2,7 @@ import { useState } from 'react';
 import { APP_TITLE } from '../constants';
 import { SearchBar } from './SearchBar';
 
-interface IHeaderProps {
-  value: string;
-  onValueChanged: (value: string) => void;
-  onSearchEvent: (value: string) => void;
-}
-
-export function Header(props: IHeaderProps) {
+export function Header() {
   const [isError, setIsError] = useState(false);
 
   if (isError) {
@@ -30,11 +24,7 @@ export function Header(props: IHeaderProps) {
             Throw Error {}
           </button>
         </div>
-        <SearchBar
-          value={props.value}
-          onValueChanged={props.onValueChanged}
-          onSearchEvent={props.onSearchEvent}
-        />
+        <SearchBar />
       </div>
     </header>
   );

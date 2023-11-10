@@ -3,23 +3,18 @@ import { ICardData } from '../interfaces/ICardData';
 import { LoadingSpinner } from './LoadingSpinner';
 import { IPaginatedArray } from '../interfaces/IPaginatedArray';
 import { Pagination } from './Pagination';
+import { useAppContext } from '../hooks/useAppContext';
 
 export interface ICardsListProps {
   listName: string;
-  cardsList: IPaginatedArray<ICardData> | null;
-  currentItemsPerPage: number;
-  onNewValueSelect: (value: number) => void;
-  onSetPage: (value: number) => void;
 }
 
 export function CardsList(props: ICardsListProps) {
-  const {
-    listName,
-    cardsList,
-    currentItemsPerPage,
-    onNewValueSelect,
-    onSetPage,
-  } = props;
+  const { listName } = props;
+
+  const appContext = useAppContext();
+
+  const cards = appContext?.state.cards.cards;
 
   const showCards = (paginatedArray: IPaginatedArray<ICardData>) => (
     <>
@@ -28,26 +23,14 @@ export function CardsList(props: ICardsListProps) {
           <Card {...el} key={el.id} />
         ))}
       </div>
-      <Pagination
-        pageSize={paginatedArray.pageSize}
-        currentPage={paginatedArray.currentPage}
-        size={paginatedArray.size}
-        baseLink=""
-        currentItemsPerPage={currentItemsPerPage}
-        onNewValueSelect={onNewValueSelect}
-        onSetPage={onSetPage}
-      />
+      <Pagination />
     </>
   );
 
   return (
     <div className="mt-16">
       <h3 className="text-gray-600 text-2xl font-medium">{listName}</h3>
-      {cardsList && cardsList.array.length > 0 ? (
-        showCards(cardsList)
-      ) : (
-        <LoadingSpinner />
-      )}
+      {cards && cards.array.length > 0 ? showCards(cards) : <LoadingSpinner />}
     </div>
   );
 }

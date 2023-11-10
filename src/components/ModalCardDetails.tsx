@@ -1,33 +1,30 @@
-import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { LoadingSpinner } from './LoadingSpinner';
-import { useEffect, useState } from 'react';
-import { loadCardData } from '../utils/loadCardData';
 import { IDetailedCardData } from '../interfaces/IDetailedCardData';
+import { useAppContext } from '../hooks/useAppContext';
+import { actionCloseDetails } from '../store/actions/actionCloseDetails';
+import { useParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { actionLoadDetails } from '../store/actions/actionLoadDetails';
 
 export function ModalCardDetails() {
-  const params = useParams<{ id: string }>();
-  const navigate = useNavigate();
+  const appContext = useAppContext();
 
-  const [searchParams] = useSearchParams();
-
-  const [cardData, setCardData] = useState<IDetailedCardData | null>(null);
-
-  const closeModal = () => {
-    navigate({
-      pathname: '/',
-      search: searchParams.toString(),
-    });
-  };
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
-    if (params.id !== undefined) {
-      loadCardData(params.id)
-        .then((loadedData) => {
-          setCardData(loadedData);
-        })
-        .catch((err) => console.error(err));
+    if (id !== undefined && appContext) {
+      actionLoadDetails(parseInt(id, 10), appContext);
     }
-  }, [params.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  if (!appContext || appContext.state.details.openedCardId === null) {
+    return;
+  }
+
+  const closeModal = () => {
+    actionCloseDetails(appContext);
+  };
 
   const displayDetails = (data: IDetailedCardData) => {
     return (
@@ -81,7 +78,11 @@ export function ModalCardDetails() {
             />
           </svg>
         </button>
-        {cardData ? displayDetails(cardData) : <LoadingSpinner />}
+        {appContext.state.details.details ? (
+          displayDetails(appContext.state.details.details)
+        ) : (
+          <LoadingSpinner />
+        )}
       </div>
     </div>
   );

@@ -1,113 +1,111 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { CardsList } from '../components/CardsList';
 import { CARDS_COUNT_PER_PAGE } from '../constants';
-import { ICardData } from '../interfaces/ICardData';
-import { getQueryFormLocalStorage } from '../utils/querySaveTools';
-import { Outlet, useSearchParams } from 'react-router-dom';
-import { IPaginatedArray } from '../interfaces/IPaginatedArray';
-import { loadCardsData } from '../utils/loadCardsData';
+import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
+import { useAppContext } from '../hooks/useAppContext';
+import { actionChangeItemsPerPage } from '../store/actions/actionChangeItemsPerPage';
+import { actionChangeSearchString } from '../store/actions/actionChangeSearchString';
+import { actionChangePaginationPage } from '../store/actions/actionChangePaginationPage';
+import {
+  IMainSearchParams,
+  mergeSearchParams,
+} from '../utils/mergeSearchParams';
 
 export function MainPage() {
-  const [data, setData] = useState<IPaginatedArray<ICardData> | null>(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchPage, setSearchPage] = useState(1);
-  const [cardsPerPage, setCardsPerPage] = useState(CARDS_COUNT_PER_PAGE);
+  const appContext = useAppContext();
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const navigate = useNavigate();
+
   const searchString = searchParams.get('search');
   const searchPageQuery = searchParams.get('page');
   const searchCount = searchParams.get('count');
 
-  const searchInArtGallery = async (query: string) => {
-    setData(null);
-    const cardsData = await loadCardsData(query);
-    setSearchParams(cardsData.searchParams);
-    setData(cardsData.cards);
-  };
+  const stateSearch = appContext?.state.search;
+
+  const openedCardId = appContext?.state.details.openedCardId || null;
+
+  let convertedQueryPageNumber = 1;
+  let convertedQueryItemsPerPage = CARDS_COUNT_PER_PAGE;
+
+  if (searchCount && searchCount.length > 0 && parseInt(searchCount, 10) > 0) {
+    convertedQueryItemsPerPage = Number(searchCount);
+  }
+
+  if (searchPageQuery !== null && searchPageQuery.length > 0) {
+    convertedQueryPageNumber = Number(searchPageQuery);
+  }
+
+  if (convertedQueryPageNumber < 1) {
+    convertedQueryPageNumber = 1;
+  }
 
   useEffect(() => {
-    const queryFromLocalStorage = getQueryFormLocalStorage();
-
-    let query = searchString;
-
-    let page = 1;
-
-    let count = CARDS_COUNT_PER_PAGE;
-
-    if (!query && queryFromLocalStorage) {
-      query = queryFromLocalStorage;
-    }
-
-    if (searchPageQuery !== null && searchPageQuery.length > 0) {
-      page = Number(searchPageQuery);
-    }
-
-    if (page < 1) {
-      page = 1;
-    }
-
-    if (searchCount && searchCount.length > 0 && Number(searchCount) > 0) {
-      count = Number(searchCount);
-    }
-
-    setSearchQuery(query || '');
-    setSearchPage(page);
-    setCardsPerPage(count);
-
-    loadCardsData(query, page, count)
-      .then((data) => setData(data.cards))
-      .catch((e) => console.error(e));
-  }, [searchString, searchPageQuery, searchCount, cardsPerPage]);
-
-  const handleSearchQueryChange = (query: string) => {
-    if (query === searchQuery) {
-      return;
-    }
-    setSearchQuery(query);
-  };
-
-  const handleSetPage = (number: number) => {
-    if (number === searchPage) {
+    if (!appContext) {
       return;
     }
 
-    setData(null);
+    actionChangeSearchString(searchString || '', appContext);
+    actionChangePaginationPage(convertedQueryPageNumber, appContext);
+    actionChangeItemsPerPage(convertedQueryItemsPerPage, appContext);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-    searchParams.set('page', number.toString());
-    setSearchParams(searchParams);
-  };
-
-  const handleSetNewItemsPerPage = (number: number) => {
-    if (number === cardsPerPage) {
+  useEffect(() => {
+    if (!stateSearch) {
       return;
     }
 
-    setData(null);
+    const urlParams: IMainSearchParams = {
+      searchString: searchString || '',
+      pageNumber: convertedQueryPageNumber,
+      itemsPerPage: convertedQueryItemsPerPage,
+    };
 
-    searchParams.set('count', number.toString());
-    searchParams.set('page', '1');
-    setSearchParams(searchParams);
-  };
+    const stateParams: IMainSearchParams = {
+      searchString: stateSearch.searchString,
+      pageNumber: stateSearch.paginationPage,
+      itemsPerPage: stateSearch.itemsPerPage,
+    };
+
+    const mergeResult = mergeSearchParams(urlParams, stateParams);
+
+    if (mergeResult.isUpdateNeeded) {
+      setSearchParams(mergeResult.newSearchParams);
+    }
+  }, [
+    stateSearch,
+    searchString,
+    convertedQueryPageNumber,
+    convertedQueryItemsPerPage,
+    setSearchParams,
+  ]);
+
+  useEffect(() => {
+    if (openedCardId !== null) {
+      navigate({
+        pathname: `/details/${openedCardId}`,
+        search: searchParams.toString(),
+      });
+    } else {
+      navigate({
+        pathname: '/',
+        search: searchParams.toString(),
+      });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [openedCardId]);
 
   return (
     <>
       <Outlet />
-      <Header
-        value={searchQuery}
-        onSearchEvent={(val) => searchInArtGallery(val)}
-        onValueChanged={(val) => handleSearchQueryChange(val)}
-      />
+      <Header />
       <main className="my-8">
         <div className="container mx-auto px-6">
-          <CardsList
-            listName="All artwork"
-            cardsList={data}
-            currentItemsPerPage={cardsPerPage}
-            onNewValueSelect={handleSetNewItemsPerPage}
-            onSetPage={handleSetPage}
-          />
+          <CardsList listName="All artwork" />
         </div>
       </main>
       <Footer />

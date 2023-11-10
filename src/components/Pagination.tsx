@@ -1,70 +1,25 @@
+import { useAppContext } from '../hooks/useAppContext';
+import { actionChangePaginationPage } from '../store/actions/actionChangePaginationPage';
+import { calculatePagination } from '../utils/calculatePagination';
 import { ItemsPerPageSelect } from './ItemsPerPageSelect';
 
-interface IPaginationProps {
-  pageSize: number;
-  currentPage: number;
-  size: number;
-  baseLink: string;
-  currentItemsPerPage: number;
-  onNewValueSelect: (value: number) => void;
-  onSetPage: (value: number) => void;
-}
+export function Pagination() {
+  const appContext = useAppContext();
 
-export function Pagination(props: IPaginationProps) {
-  const {
-    pageSize,
-    currentPage,
-    size,
-    currentItemsPerPage,
-    onNewValueSelect,
-    onSetPage,
-  } = props;
+  const setPageEvent = (page: number) => {
+    appContext && actionChangePaginationPage(page, appContext);
+  };
 
-  const paginationMaxPagesVisible = 5;
-
-  const totalPages = Math.floor(size / pageSize) + 1;
-  const minPagesNumber = 1;
-
-  let startPage = 1;
-  let endPage = startPage + paginationMaxPagesVisible;
-
-  if (
-    currentPage <= totalPages &&
-    currentPage >= totalPages - Math.floor(paginationMaxPagesVisible / 2)
-  ) {
-    endPage = totalPages;
-    startPage = totalPages - paginationMaxPagesVisible;
-
-    if (totalPages < paginationMaxPagesVisible) {
-      startPage = minPagesNumber;
-    }
-  } else if (
-    currentPage >= minPagesNumber &&
-    currentPage <= minPagesNumber + Math.floor(paginationMaxPagesVisible / 2)
-  ) {
-    startPage = minPagesNumber;
-    endPage = startPage + paginationMaxPagesVisible;
-
-    if (totalPages < startPage + paginationMaxPagesVisible) {
-      startPage = totalPages;
-    }
-  } else if (
-    currentPage > minPagesNumber + Math.floor(paginationMaxPagesVisible / 2) &&
-    currentPage < totalPages - Math.floor(paginationMaxPagesVisible / 2)
-  ) {
-    startPage = currentPage - Math.floor(paginationMaxPagesVisible / 2);
-    endPage = currentPage + Math.floor(paginationMaxPagesVisible / 2) + 1;
+  if (!appContext || !appContext.state.cards.cards) {
+    return <div>none</div>;
   }
 
-  const paginationArray = Array.from(
-    { length: endPage - startPage },
-    (_, i) => startPage + i
-  );
+  const currentPage = appContext.state.cards.cards.currentPage;
+  const size = appContext.state.cards.cards.size;
+  const itemsPerPage = appContext.state.cards.cards.pageSize;
 
-  const paginationNextPage =
-    currentPage + 1 >= totalPages ? null : currentPage + 1;
-  const paginationPreviousPage =
-    currentPage - 1 <= minPagesNumber ? null : currentPage - 1;
+  const { paginationArray, paginationNextPage, paginationPreviousPage } =
+    calculatePagination(currentPage, size, itemsPerPage);
 
   const getPaginationButton = (pageNumber: number) => {
     const buttonNormalClasses =
@@ -76,7 +31,7 @@ export function Pagination(props: IPaginationProps) {
 
     return (
       <li key={pageNumber}>
-        <div className={buttonClasses} onClick={() => onSetPage(pageNumber)}>
+        <div className={buttonClasses} onClick={() => setPageEvent(pageNumber)}>
           {pageNumber}
         </div>
       </li>
@@ -89,7 +44,7 @@ export function Pagination(props: IPaginationProps) {
         <li>
           <div
             onClick={() =>
-              paginationPreviousPage && onSetPage(paginationPreviousPage)
+              paginationPreviousPage && setPageEvent(paginationPreviousPage)
             }
             className="flex items-center justify-center px-4 h-10 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
@@ -99,17 +54,16 @@ export function Pagination(props: IPaginationProps) {
         {paginationArray.map((el) => getPaginationButton(el))}
         <li>
           <div
-            onClick={() => paginationNextPage && onSetPage(paginationNextPage)}
+            onClick={() =>
+              paginationNextPage && setPageEvent(paginationNextPage)
+            }
             className="flex items-center justify-center px-4 h-10 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white"
           >
             Next
           </div>
         </li>
       </ul>
-      <ItemsPerPageSelect
-        currentItemsPerPage={currentItemsPerPage}
-        onNewValueSelect={onNewValueSelect}
-      />
+      <ItemsPerPageSelect />
     </nav>
   );
 }
