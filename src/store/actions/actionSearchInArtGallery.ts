@@ -13,7 +13,7 @@ export const actionSearchInArtGallery = (
   );
   loadCardsData(query, 1, state.search.itemsPerPage)
     .then((result) => {
-      dispatch(setCardsData({ isIsError: false, cards: result.cards }));
+      dispatch(setCardsData({ isIsError: false, cards: result }));
     })
     .catch(() => {
       dispatch(setCardsData({ isIsError: true, cards: null }));

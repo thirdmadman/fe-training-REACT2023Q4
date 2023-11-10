@@ -11,7 +11,7 @@ export const actionChangeItemsPerPage = (
   dispatch(setSearchData({ ...state.search, paginationPage: 1, itemsPerPage }));
   loadCardsData(state.search.searchString, 1, itemsPerPage)
     .then((result) => {
-      dispatch(setCardsData({ isIsError: false, cards: result.cards }));
+      dispatch(setCardsData({ isIsError: false, cards: result }));
     })
     .catch(() => {
       dispatch(setCardsData({ isIsError: true, cards: null }));

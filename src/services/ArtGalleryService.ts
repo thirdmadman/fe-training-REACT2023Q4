@@ -24,11 +24,13 @@ export class ArtGalleryService {
       ? `&q=${window.encodeURIComponent(queryString)}`
       : '';
 
-    const fetchRequest = await window.fetch(
+    const fetchRequest = await fetch(
       `${this.apiUrl}/search?${PUBLIC_DOMAIN}${queryUrlString}&${QUERY_FIELDS}&limit=${limit}&page=${page}`
     );
 
-    return (await fetchRequest.json()) as IArtGalleryResponseSearch;
+    const result = (await fetchRequest.json()) as IArtGalleryResponseSearch;
+
+    return result;
   }
 
   async getAll(page: number, limit: number) {
@@ -40,8 +42,8 @@ export class ArtGalleryService {
   }
 
   async getOneById(id: number) {
-    const fetchRequest = await window.fetch(`${this.apiUrl}/${id}`);
-
-    return (await fetchRequest.json()) as IArtGalleryResponseGetOne;
+    const fetchRequest = await fetch(`${this.apiUrl}/${id}`);
+    const result = (await fetchRequest.json()) as IArtGalleryResponseGetOne;
+    return result;
   }
 }

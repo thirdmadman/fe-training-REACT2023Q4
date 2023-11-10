@@ -2,7 +2,6 @@ import { API_URL, CARDS_COUNT_PER_PAGE } from '../constants';
 import { IArtGalleryResponseSearch } from '../interfaces/IArtGalleryResponse';
 import { ArtGalleryService } from '../services/ArtGalleryService';
 import { convertArtGalleryResponseToCards } from './apiDataConverter';
-import { saveQueryToLocalStorage } from './querySaveTools';
 
 export async function loadCardsData(
   query: string | null = null,
@@ -13,34 +12,14 @@ export async function loadCardsData(
 
   let response: IArtGalleryResponseSearch | null = null;
 
-  let pagesParam = {};
-  let cardsPerPageParam = {};
-  let queryParam = {};
-
-  if (page > 1) {
-    pagesParam = { page: page.toString() };
-  }
-
-  if (cardsPerPageCount !== CARDS_COUNT_PER_PAGE) {
-    cardsPerPageParam = { count: cardsPerPageCount.toString() };
-  }
-
   if (query === null || query === '') {
     response = await artGalleryService.getAll(page, cardsPerPageCount);
-    saveQueryToLocalStorage(null);
   } else {
-    saveQueryToLocalStorage(query);
-    queryParam = {
-      search: query,
-    };
     response = await artGalleryService.getByQueryString(
       query,
       page,
       cardsPerPageCount
     );
   }
-  return {
-    cards: convertArtGalleryResponseToCards(response),
-    searchParams: { ...queryParam, ...pagesParam, ...cardsPerPageParam },
-  };
+  return response ? convertArtGalleryResponseToCards(response) : null;
 }
