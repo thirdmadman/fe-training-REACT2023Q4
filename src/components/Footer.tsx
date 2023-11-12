@@ -1,4 +1,3 @@
-import React from 'react';
 import { APP_TITLE } from '../constants';
 
 export function Footer() {
