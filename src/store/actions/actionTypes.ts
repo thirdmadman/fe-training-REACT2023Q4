@@ -1,0 +1,5 @@
+export const actionTypes = {
+  SET_SEARCH_DATA: 'SET_SEARCH_DATA',
+  SET_CARDS_DATA: 'SET_CARDS_DATA',
+  SET_DETAILS_DATA: 'SET_DETAILS_DATA',
+} as const;
