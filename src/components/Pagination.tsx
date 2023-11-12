@@ -11,7 +11,7 @@ export function Pagination() {
   };
 
   if (!appContext || !appContext.state.cards.cards) {
-    return <div>none</div>;
+    return;
   }
 
   const currentPage = appContext.state.cards.cards.currentPage;
