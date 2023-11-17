@@ -3,9 +3,9 @@ import { ICardData } from '../interfaces/ICardData';
 import { LoadingSpinner } from './LoadingSpinner';
 import { IPaginatedArray } from '../interfaces/IPaginatedArray';
 import { Pagination } from './Pagination';
-import { useAppContext } from '../hooks/useAppContext';
-import { ICardsSlice } from '../store/appState';
 import { ErrorCard } from './ErrorCard';
+import { useAppSelector } from '../redux/hooks';
+import { useSearchArtsQuery } from '../redux/api/apiSlice';
 
 export interface ICardsListProps {
   listName: string;
@@ -14,9 +14,9 @@ export interface ICardsListProps {
 export function CardsList(props: ICardsListProps) {
   const { listName } = props;
 
-  const appContext = useAppContext();
+  const search = useAppSelector((state) => state.search);
 
-  const cards = appContext?.state.cards || null;
+  const { data, isError, isFetching } = useSearchArtsQuery(search);
 
   const showCards = (paginatedArray: IPaginatedArray<ICardData>) => (
     <>
@@ -29,12 +29,12 @@ export function CardsList(props: ICardsListProps) {
     </>
   );
 
-  const showCardsList = (cardsSlice: ICardsSlice | null) => {
-    if (!cardsSlice) {
-      return <ErrorCard title="Unknown error" subtitle="This is fatal" />;
-    }
-
-    if (cardsSlice.isIsError) {
+  const showCardsList = (
+    cards: IPaginatedArray<ICardData> | undefined,
+    isErrorShow: boolean,
+    isLoadingShow: boolean
+  ) => {
+    if (isErrorShow) {
       return (
         <ErrorCard
           title="Server response error"
@@ -43,11 +43,11 @@ export function CardsList(props: ICardsListProps) {
       );
     }
 
-    if (!cardsSlice.cards) {
+    if (isLoadingShow) {
       return <LoadingSpinner />;
     }
 
-    if (!cardsSlice.cards.array || cardsSlice.cards.array.length <= 0) {
+    if (!cards || cards.array.length <= 0) {
       return (
         <ErrorCard
           title="Not found"
@@ -56,13 +56,13 @@ export function CardsList(props: ICardsListProps) {
       );
     }
 
-    return showCards(cardsSlice.cards);
+    return showCards(cards);
   };
 
   return (
     <div className="mt-16">
       <h3 className="text-gray-600 text-2xl font-medium">{listName}</h3>
-      {showCardsList(cards)}
+      {showCardsList(data, isError, isFetching)}
     </div>
   );
 }

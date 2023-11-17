@@ -1,31 +1,34 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { CardsList } from '../components/CardsList';
 import { CARDS_COUNT_PER_PAGE } from '../constants';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
-import { useAppContext } from '../hooks/useAppContext';
 import {
   IMainSearchParams,
   mergeSearchParams,
 } from '../utils/mergeSearchParams';
 import { getQueryFormLocalStorage } from '../utils/querySaveTools';
-import { actionChangeSearch } from '../store/actions/actionChangeSearch';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { changeSearch } from '../redux/features/searchSlice';
 
 export function MainPage() {
-  const appContext = useAppContext();
-
-  const [searchParams, setSearchParams] = useSearchParams();
-
   const navigate = useNavigate();
 
+  const searchQueryFromLocalStorage = useCallback(
+    () => getQueryFormLocalStorage(),
+    []
+  )();
+
+  const dispatch = useAppDispatch();
+  const searchState = useAppSelector((state) => state.search);
+
+  const detailsState = useAppSelector((state) => state.details);
+
+  const [searchParams, setSearchParams] = useSearchParams();
   const searchString = searchParams.get('search');
   const searchPageQuery = searchParams.get('page');
   const searchCount = searchParams.get('count');
-
-  const stateSearch = appContext?.state.search;
-
-  const openedCardId = appContext?.state.details.openedCardId || null;
 
   let convertedQueryPageNumber = 1;
   let convertedQueryItemsPerPage = CARDS_COUNT_PER_PAGE;
@@ -43,27 +46,17 @@ export function MainPage() {
   }
 
   useEffect(() => {
-    if (!appContext) {
-      return;
-    }
-
-    const searchQueryFromLocalStorage = getQueryFormLocalStorage();
-
-    actionChangeSearch(
-      searchString || searchQueryFromLocalStorage || '',
-      convertedQueryPageNumber,
-      convertedQueryItemsPerPage,
-      appContext
+    dispatch(
+      changeSearch({
+        paginationPage: convertedQueryPageNumber,
+        itemsPerPage: convertedQueryItemsPerPage,
+        searchString: searchString || searchQueryFromLocalStorage || '',
+      })
     );
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    if (!stateSearch) {
-      return;
-    }
-
     const urlParams: IMainSearchParams = {
       searchString: searchString || '',
       pageNumber: convertedQueryPageNumber,
@@ -71,9 +64,9 @@ export function MainPage() {
     };
 
     const stateParams: IMainSearchParams = {
-      searchString: stateSearch.searchString,
-      pageNumber: stateSearch.paginationPage,
-      itemsPerPage: stateSearch.itemsPerPage,
+      searchString: searchState.searchString,
+      pageNumber: searchState.paginationPage,
+      itemsPerPage: searchState.itemsPerPage,
     };
 
     const mergeResult = mergeSearchParams(urlParams, stateParams);
@@ -82,7 +75,7 @@ export function MainPage() {
       setSearchParams(mergeResult.newSearchParams);
     }
   }, [
-    stateSearch,
+    searchState,
     searchString,
     convertedQueryPageNumber,
     convertedQueryItemsPerPage,
@@ -90,9 +83,9 @@ export function MainPage() {
   ]);
 
   useEffect(() => {
-    if (openedCardId !== null) {
+    if (detailsState.openedCardId !== null) {
       navigate({
-        pathname: `/details/${openedCardId}`,
+        pathname: `/details/${detailsState.openedCardId}`,
         search: searchParams.toString(),
       });
     } else {
@@ -102,7 +95,7 @@ export function MainPage() {
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [openedCardId]);
+  }, [detailsState]);
 
   return (
     <>

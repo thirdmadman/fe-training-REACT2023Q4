@@ -1,23 +1,27 @@
-import { useRef } from 'react';
-import { useAppContext } from '../hooks/useAppContext';
-import { actionSearchInArtGallery } from '../store/actions/actionSearchInArtGallery';
-import { actionChangeSearchString } from '../store/actions/actionChangeSearchString';
-
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { changeSearchString } from '../redux/features/searchSlice';
 export function SearchBar() {
-  const appContext = useAppContext();
+  const dispatch = useAppDispatch();
+
+  const searchString = useAppSelector((state) => state.search.searchString);
+
+  const [search, setSearch] = useState(searchString);
+
+  useEffect(() => {
+    setSearch(searchString);
+  }, [searchString]);
 
   const clearInput = () => {
-    appContext && actionChangeSearchString('', appContext);
+    setSearch('');
   };
-
-  const inputRef = useRef<HTMLInputElement>(null);
 
   const onValueInputChanged = (value: string) => {
-    appContext && actionChangeSearchString(value, appContext);
+    setSearch(value);
   };
 
-  const onSearchFired = (value: string) => {
-    appContext && actionSearchInArtGallery(value, appContext);
+  const onSearchFired = () => {
+    dispatch(changeSearchString(search));
   };
 
   return (
@@ -43,8 +47,7 @@ export function SearchBar() {
           type="text"
           placeholder="Search"
           onInput={(e) => onValueInputChanged(e.currentTarget.value)}
-          value={appContext?.state.search.searchString}
-          ref={inputRef}
+          value={search}
         />
         <button
           className="absolute text-xl inset-y-0 right-0 pr-4 flex items-center"
@@ -56,7 +59,7 @@ export function SearchBar() {
       <button
         type="button"
         className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-        onClick={() => onSearchFired(inputRef.current?.value || '')}
+        onClick={() => onSearchFired()}
       >
         Search!
       </button>

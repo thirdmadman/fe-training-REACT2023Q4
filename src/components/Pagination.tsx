@@ -1,22 +1,26 @@
-import { useAppContext } from '../hooks/useAppContext';
-import { actionChangePaginationPage } from '../store/actions/actionChangePaginationPage';
+import { useSearchArtsQuery } from '../redux/api/apiSlice';
+import { changePaginationPage } from '../redux/features/searchSlice';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { calculatePagination } from '../utils/calculatePagination';
 import { ItemsPerPageSelect } from './ItemsPerPageSelect';
 
 export function Pagination() {
-  const appContext = useAppContext();
+  const dispatch = useAppDispatch();
 
   const setPageEvent = (page: number) => {
-    appContext && actionChangePaginationPage(page, appContext);
+    dispatch(changePaginationPage(page));
   };
 
-  if (!appContext || !appContext.state.cards.cards) {
+  const search = useAppSelector((state) => state.search);
+  const { data } = useSearchArtsQuery(search);
+
+  if (!data || !data.array) {
     return;
   }
 
-  const currentPage = appContext.state.cards.cards.currentPage;
-  const size = appContext.state.cards.cards.size;
-  const itemsPerPage = appContext.state.cards.cards.pageSize;
+  const currentPage = data.currentPage;
+  const size = data.size;
+  const itemsPerPage = data.pageSize;
 
   const { paginationArray, paginationNextPage, paginationPreviousPage } =
     calculatePagination(currentPage, size, itemsPerPage);

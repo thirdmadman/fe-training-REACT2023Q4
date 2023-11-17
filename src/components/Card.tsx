@@ -1,6 +1,6 @@
 import { ICardData } from '../interfaces/ICardData';
-import { actionOpenDetails } from '../store/actions/actionOpenDetails';
-import { useAppContext } from '../hooks/useAppContext';
+import { openDetails } from '../redux/features/detailsSlice';
+import { useAppDispatch } from '../redux/hooks';
 
 export function Card(props: ICardData) {
   const {
@@ -13,10 +13,10 @@ export function Card(props: ICardData) {
     id,
   } = props;
 
-  const appContext = useAppContext();
+  const dispatch = useAppDispatch();
 
-  const openDetails = () => {
-    appContext && actionOpenDetails(id, appContext);
+  const openDetailsEvent = () => {
+    dispatch(openDetails(id));
   };
 
   const openImageInNewTab = (
@@ -29,7 +29,7 @@ export function Card(props: ICardData) {
   return (
     <div
       className="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden"
-      onClick={openDetails}
+      onClick={openDetailsEvent}
     >
       <div
         className="h-56 w-full bg-cover overflow-hidden relative"

@@ -1,36 +1,41 @@
 import { LoadingSpinner } from './LoadingSpinner';
-import { useAppContext } from '../hooks/useAppContext';
-import { actionCloseDetails } from '../store/actions/actionCloseDetails';
 import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import { actionLoadDetails } from '../store/actions/actionLoadDetails';
-import { IDetailsSlice } from '../store/appState';
 import { ErrorCard } from './ErrorCard';
+import { useAppDispatch } from '../redux/hooks';
+import { useGetOneArtQuery } from '../redux/api/apiSlice';
+import { closeDetails, openDetails } from '../redux/features/detailsSlice';
+import { IDetailedCardData } from '../interfaces/IDetailedCardData';
+import { useEffect } from 'react';
 
 export function ModalCardDetails() {
-  const appContext = useAppContext();
-
   const { id } = useParams<{ id: string }>();
 
+  const dispatch = useAppDispatch();
+
+  const { data, isError, isFetching, isUninitialized } = useGetOneArtQuery(
+    (id && parseInt(id, 10)) || 0,
+    { skip: !id }
+  );
+
   useEffect(() => {
-    if (id !== undefined && appContext) {
-      actionLoadDetails(parseInt(id, 10), appContext);
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  if (!appContext || appContext.state.details.openedCardId === null) {
-    return;
-  }
-
-  const details = appContext.state.details;
+    id && dispatch(openDetails(parseInt(id, 10)));
+  });
 
   const closeModal = () => {
-    actionCloseDetails(appContext);
+    dispatch(closeDetails());
   };
 
-  const showDetails = (detailsSlice: IDetailsSlice) => {
-    if (detailsSlice.isIsError) {
+  const showDetails = (
+    card: IDetailedCardData | undefined,
+    isErrorShow: boolean,
+    isLoadingShow: boolean,
+    isUninitializedShow: boolean
+  ) => {
+    if (isUninitializedShow) {
+      return;
+    }
+
+    if (isErrorShow) {
       return (
         <ErrorCard
           title="Server error"
@@ -39,8 +44,17 @@ export function ModalCardDetails() {
       );
     }
 
-    if (!detailsSlice.details) {
+    if (isLoadingShow) {
       return <LoadingSpinner />;
+    }
+
+    if (!card) {
+      return (
+        <ErrorCard
+          title="No such item exist"
+          subtitle="We are sorry but this item is not exist"
+        />
+      );
     }
 
     const {
@@ -50,7 +64,7 @@ export function ModalCardDetails() {
       artworkTypeTitle,
       styleTitle,
       imageUrl,
-    } = detailsSlice.details;
+    } = card;
 
     return (
       <section className="m-5 mt-10">
@@ -99,7 +113,7 @@ export function ModalCardDetails() {
             />
           </svg>
         </button>
-        {showDetails(details)}
+        {showDetails(data, isError, isFetching, isUninitialized)}
       </div>
     </div>
   );

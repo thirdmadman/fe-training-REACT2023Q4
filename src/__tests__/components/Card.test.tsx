@@ -1,18 +1,17 @@
 import { describe, expect } from 'vitest';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { screen } from '@testing-library/react';
 import { Card } from '../../components/Card';
 import { cardDataMock } from '../mocks/cardDataMock';
-import { actionOpenDetails } from '../../store/actions/actionOpenDetails';
-import { useAppContext } from '../../hooks/useAppContext';
+import { renderWithProviders } from '../utils/test-utils';
 
 describe('Card test', () => {
   it('renders without crashing', () => {
-    const { container } = render(<Card {...cardDataMock} />);
+    const { container } = renderWithProviders(<Card {...cardDataMock} />);
     expect(container.firstChild).not.toBeNull();
   });
 
   it('renders text correctly', () => {
-    render(<Card {...cardDataMock} />);
+    renderWithProviders(<Card {...cardDataMock} />);
 
     expect(screen.getByText(cardDataMock.title)).toBeDefined();
     expect(screen.getByText(cardDataMock.artistDisplay)).toBeDefined();
@@ -22,7 +21,7 @@ describe('Card test', () => {
 
   it('when no image placeholder available it not shown', () => {
     const changedProps = { ...cardDataMock, imagePlaceholder: null };
-    const { container } = render(<Card {...changedProps} />);
+    const { container } = renderWithProviders(<Card {...changedProps} />);
 
     const contentDiv = container.firstElementChild?.firstElementChild;
     if (contentDiv) {
@@ -30,26 +29,5 @@ describe('Card test', () => {
     }
 
     expect(container.firstChild).not.toBeNull();
-  });
-
-  it('should call open details on click', () => {
-    vi.mock('../../hooks/useAppContext', () => {
-      return {
-        useAppContext: vi.fn(() => ({})),
-      };
-    });
-
-    vi.mock('../../store/actions/actionOpenDetails', () => {
-      return {
-        actionOpenDetails: vi.fn(),
-      };
-    });
-
-    const { container } = render(<Card {...cardDataMock} />);
-
-    container.firstElementChild && fireEvent.click(container.firstElementChild);
-
-    expect(useAppContext).toBeCalledTimes(1);
-    expect(actionOpenDetails).toBeCalledTimes(1);
   });
 });
