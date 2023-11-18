@@ -6,7 +6,6 @@ import { ItemsPerPageSelect } from './ItemsPerPageSelect';
 
 export function Pagination() {
   const dispatch = useAppDispatch();
-
   const setPageEvent = (page: number) => {
     dispatch(changePaginationPage(page));
   };
