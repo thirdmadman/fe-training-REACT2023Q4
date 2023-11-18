@@ -24,6 +24,7 @@ export function ItemsPerPageSelect() {
         Items on page
       </label>
       <select
+        data-testid="select"
         id="states"
         className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg border-gray-100 dark:border-gray-700 border-2 focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
         onInput={(e) => setItemsPerPageEvent(Number(e.currentTarget.value))}
