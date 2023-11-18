@@ -36,7 +36,9 @@ class ErrorBoundary extends Component<Props, State> {
         <div className="flex items-center justify-center w-screen h-screen flex-col">
           <h1 className="text-3xl">Sorry.. there was an error</h1>
           <h3 className="text-gray-500 text-2xl mt-5">Stack:</h3>
-          <pre>{this.state?.errorInfo?.componentStack || ''}</pre>
+          <pre data-testId="stack">
+            {this.state?.errorInfo?.componentStack || ''}
+          </pre>
         </div>
       );
     }
