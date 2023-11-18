@@ -23,11 +23,6 @@ describe('ItemsPerPageSelect test', () => {
       },
     });
 
-    console.log(
-      'screen.getAllByTestId(select) :>> ',
-      screen.getByTestId('select')
-    );
-
     expect(screen.getByTestId<HTMLSelectElement>('select').value).toBe(
       itemsPerPage.toString()
     );
