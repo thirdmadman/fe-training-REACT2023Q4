@@ -29,12 +29,12 @@ describe('Pagination test', () => {
     vi.clearAllMocks();
   });
 
-  test('should not render by default', async () => {
+  it('should not render by default', async () => {
     const { container } = render(<Pagination />);
     expect(container.childElementCount).toBe(0);
   });
 
-  test('should render buttons and call action after button clicked', async () => {
+  it('should render buttons and call action after button clicked', async () => {
     mocks.useSearchArtsQuery.mockImplementationOnce(
       vi.fn(() => ({
         data: {
