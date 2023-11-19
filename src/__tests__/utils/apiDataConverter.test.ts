@@ -9,7 +9,7 @@ import {
 
 describe('apiDataConverter test', () => {
   describe('convertArtGalleryResponseToCards', () => {
-    test('should convert IArtGalleryResponseAll to IPaginatedArray<ICardData>', () => {
+    it('should convert IArtGalleryResponseAll to IPaginatedArray<ICardData>', () => {
       const mockResponse = {
         config: { iiif_url: 'mock-url', website_url: 'mock-website-url' },
         data: [
@@ -61,7 +61,7 @@ describe('apiDataConverter test', () => {
   });
 
   describe('convertArtGalleryResponseGetOneToCard', () => {
-    test('should convert IArtGalleryResponseGetOne to IDetailedCardData', () => {
+    it('should convert IArtGalleryResponseGetOne to IDetailedCardData', () => {
       const mockResponse: IArtGalleryResponseGetOne = {
         config: { iiif_url: 'mock-url', website_url: 'mock-website-url' },
         data: {

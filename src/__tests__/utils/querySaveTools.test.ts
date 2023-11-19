@@ -11,7 +11,7 @@ describe('localStorageUtils test', () => {
     vi.clearAllMocks();
   });
 
-  test('saveQueryToLocalStorage should update lastSearchQuery in localStorage', () => {
+  it('saveQueryToLocalStorage should update lastSearchQuery in localStorage', () => {
     const query = 'test query';
     const getDataMock = vi.spyOn(DataLocalStorageProvider, 'getData');
     const setDataMock = vi.spyOn(DataLocalStorageProvider, 'setData');
@@ -29,7 +29,7 @@ describe('localStorageUtils test', () => {
     );
   });
 
-  test('getQueryFormLocalStorage should return lastSearchQuery from localStorage', () => {
+  it('getQueryFormLocalStorage should return lastSearchQuery from localStorage', () => {
     const lastSearchQuery = 'stored query';
     const getDataMock = vi.spyOn(DataLocalStorageProvider, 'getData');
 

@@ -3,7 +3,7 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Layout } from '../../components/Layout';
 
 describe('Layout test', () => {
-  test('renders children inside a div with the correct class', () => {
+  it('renders children inside a div with the correct class', () => {
     const { getByTestId } = render(
       <MemoryRouter>
         <Routes>

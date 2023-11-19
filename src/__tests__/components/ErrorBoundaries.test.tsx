@@ -15,7 +15,7 @@ const TestErrorComponent: React.FC<TestErrorComponentProps> = ({
 };
 
 describe('ErrorBoundary test', () => {
-  test('renders children when there is no error', () => {
+  it('renders children when there is no error', () => {
     render(
       <ErrorBoundary>
         <TestErrorComponent />
@@ -26,7 +26,7 @@ describe('ErrorBoundary test', () => {
     expect(componentWithoutError).not.toBeNull();
   });
 
-  test('renders error message and stack trace when an error occurs', () => {
+  it('renders error message and stack trace when an error occurs', () => {
     render(
       <ErrorBoundary>
         <TestErrorComponent throwError={true} />
@@ -40,7 +40,7 @@ describe('ErrorBoundary test', () => {
     expect(stackTraceHeader).not.toBeNull();
   });
 
-  test('displays component stack in the error message', () => {
+  it('displays component stack in the error message', () => {
     render(
       <ErrorBoundary>
         <TestErrorComponent throwError={true} />

@@ -5,7 +5,7 @@ import {
 } from '../../utils/mergeSearchParams';
 
 describe('mergeSearchParams test', () => {
-  test('should return isUpdateNeeded as false and newSearchParams as empty if both params are identical', () => {
+  it('should return isUpdateNeeded as false and newSearchParams as empty if both params are identical', () => {
     const urlParams: IMainSearchParams = {
       searchString: 'test',
       pageNumber: 1,
@@ -19,7 +19,7 @@ describe('mergeSearchParams test', () => {
     expect(result.newSearchParams.toString()).toBe('');
   });
 
-  test('should return isUpdateNeeded as true and newSearchParams with updated values', () => {
+  it('should return isUpdateNeeded as true and newSearchParams with updated values', () => {
     const urlParams: IMainSearchParams = {
       searchString: 'test',
       pageNumber: 2,
@@ -37,7 +37,7 @@ describe('mergeSearchParams test', () => {
     expect(result.newSearchParams.toString()).toBe('search=different');
   });
 
-  test('should handle searchString, pageNumber, and itemsPerPage changes separately', () => {
+  it('should handle searchString, pageNumber, and itemsPerPage changes separately', () => {
     const urlParams: IMainSearchParams = {
       searchString: 'new-search',
       pageNumber: 3,

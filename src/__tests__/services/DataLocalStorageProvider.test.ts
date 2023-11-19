@@ -11,7 +11,7 @@ describe('DataLocalStorageProvider test', () => {
     localStorage.clear();
   });
 
-  test('setData should store data in localStorage', () => {
+  it('setData should store data in localStorage', () => {
     const testData: ILocalConfigs = {
       isExists: true,
       userConfigs: { lastSearchQuery: 'test' },
@@ -28,7 +28,7 @@ describe('DataLocalStorageProvider test', () => {
     expect(parsedData).toEqual(testData);
   });
 
-  test('isNotEmpty should return true when localStorage has data', () => {
+  it('isNotEmpty should return true when localStorage has data', () => {
     const testData: ILocalConfigs = {
       isExists: true,
       userConfigs: { lastSearchQuery: 'test' },
@@ -45,13 +45,13 @@ describe('DataLocalStorageProvider test', () => {
     expect(result).toBe(true);
   });
 
-  test('isNotEmpty should return false when localStorage is empty', () => {
+  it('isNotEmpty should return false when localStorage is empty', () => {
     const result = DataLocalStorageProvider.isNotEmpty();
 
     expect(result).toBe(false);
   });
 
-  test('destroy should remove data from localStorage', () => {
+  it('destroy should remove data from localStorage', () => {
     localStorage.setItem(
       DataLocalStorageProvider.localStorageItemName,
       'test-data'
@@ -66,7 +66,7 @@ describe('DataLocalStorageProvider test', () => {
     expect(storedData).toBeNull();
   });
 
-  test('getData should return stored data if it exists and has the correct version', () => {
+  it('getData should return stored data if it exists and has the correct version', () => {
     const testData: ILocalConfigs = {
       isExists: true,
       userConfigs: { lastSearchQuery: 'test' },
@@ -83,7 +83,7 @@ describe('DataLocalStorageProvider test', () => {
     expect(result).toEqual(testData);
   });
 
-  test('getData should generate and store data if no valid data is found', () => {
+  it('getData should generate and store data if no valid data is found', () => {
     const generatedData = DataLocalStorageProvider.getData();
 
     const storedData = localStorage.getItem(
