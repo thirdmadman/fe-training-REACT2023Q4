@@ -33,9 +33,21 @@ describe('apiSlice', () => {
   });
 
   it('should return arts data', async () => {
+    const reqParams = {
+      searchString: '',
+      paginationPage: 1,
+      itemsPerPage: 10,
+    };
+
+    const searchParamsUrl = `?query[term][is_public_domain]=true&fields=id,title,image_id,artist_display,artwork_type_title,date_display,thumbnail&limit=${reqParams.itemsPerPage}&page=${reqParams.paginationPage}`;
+
     server.use(
-      http.get(`${API_URL}/*`, () => {
-        return HttpResponse.json(getArtworksResp());
+      http.get(`${API_URL}/search`, ({ request }) => {
+        if (request.url === `${API_URL}/search${searchParamsUrl}`) {
+          return HttpResponse.json(getArtworksResp());
+        }
+
+        return HttpResponse.error();
       })
     );
 
@@ -48,11 +60,7 @@ describe('apiSlice', () => {
     const expectedResult = convertArtGalleryResponseToCards(getArtworksResp());
 
     const { result } = renderHookWithProviders<TResult, undefined>(() => {
-      const { data, isError, isFetching } = useSearchArtsQuery({
-        searchString: '',
-        paginationPage: 1,
-        itemsPerPage: 10,
-      });
+      const { data, isError, isFetching } = useSearchArtsQuery(reqParams);
 
       return { data, isError, isFetching };
     });
