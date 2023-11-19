@@ -8,7 +8,7 @@ interface ISearchState {
   itemsPerPage: number;
 }
 
-const initialState: ISearchState = {
+export const initialState: ISearchState = {
   searchString: '',
   paginationPage: 1,
   itemsPerPage: CARDS_COUNT_PER_PAGE,

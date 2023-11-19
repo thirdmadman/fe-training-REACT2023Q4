@@ -4,7 +4,7 @@ interface IDetailsState {
   openedCardId: number | null;
 }
 
-const initialState: IDetailsState = {
+export const initialState: IDetailsState = {
   openedCardId: null,
 };
 
