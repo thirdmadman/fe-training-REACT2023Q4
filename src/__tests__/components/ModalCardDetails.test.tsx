@@ -78,7 +78,7 @@ describe('ModalCardDetails test', () => {
     const { container } = render(<ModalCardDetails />);
 
     container.firstElementChild && fireEvent.click(container.firstElementChild);
-    expect(dispatchMock).toBeCalledTimes(1);
+
     expect(dispatchMock).toBeCalledWith(closeDetails());
 
     const closeButton = screen.getByText('Close details');
@@ -86,7 +86,6 @@ describe('ModalCardDetails test', () => {
 
     fireEvent.click(closeButton);
     expect(dispatchMock).toBeCalledWith(closeDetails());
-    expect(dispatchMock).toBeCalledTimes(2);
   });
 
   it('should render card details text correctly', () => {

@@ -6,10 +6,14 @@ import {
 } from '@reduxjs/toolkit';
 import { apiSlice } from './api/apiSlice';
 import detailsReducer, { detailsSlice } from './features/detailsSlice';
+import loadingFlagsReducer, {
+  loadingFlagsSlice,
+} from './features/loadingFlagsSlice';
 
 const reducers = {
   [searchSlice.name]: searchReducer,
   [detailsSlice.name]: detailsReducer,
+  [loadingFlagsSlice.name]: loadingFlagsReducer,
   [apiSlice.reducerPath]: apiSlice.reducer,
 };
 

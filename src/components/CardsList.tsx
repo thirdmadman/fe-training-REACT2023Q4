@@ -4,19 +4,26 @@ import { LoadingSpinner } from './LoadingSpinner';
 import { IPaginatedArray } from '../interfaces/IPaginatedArray';
 import { Pagination } from './Pagination';
 import { ErrorCard } from './ErrorCard';
-import { useAppSelector } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { useSearchArtsQuery } from '../redux/api/apiSlice';
+import { useEffect } from 'react';
+import { setIsLoadingArts } from '../redux/features/loadingFlagsSlice';
 
 export interface ICardsListProps {
   listName: string;
 }
 
 export function CardsList(props: ICardsListProps) {
+  const dispatch = useAppDispatch();
   const { listName } = props;
 
   const search = useAppSelector((state) => state.search);
 
   const { data, isError, isFetching } = useSearchArtsQuery(search);
+
+  useEffect(() => {
+    dispatch(setIsLoadingArts(isFetching));
+  }, [dispatch, isFetching]);
 
   const showCards = (paginatedArray: IPaginatedArray<ICardData>) => (
     <>

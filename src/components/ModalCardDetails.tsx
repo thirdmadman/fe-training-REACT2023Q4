@@ -6,6 +6,7 @@ import { useGetOneArtQuery } from '../redux/api/apiSlice';
 import { closeDetails, openDetails } from '../redux/features/detailsSlice';
 import { IDetailedCardData } from '../interfaces/IDetailedCardData';
 import { useEffect } from 'react';
+import { setIsLoadingDetails } from '../redux/features/loadingFlagsSlice';
 
 export function ModalCardDetails() {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +17,10 @@ export function ModalCardDetails() {
     (id && parseInt(id, 10)) || 0,
     { skip: !id }
   );
+
+  useEffect(() => {
+    dispatch(setIsLoadingDetails(isFetching));
+  }, [dispatch, isFetching]);
 
   useEffect(() => {
     id && dispatch(openDetails(parseInt(id, 10)));
