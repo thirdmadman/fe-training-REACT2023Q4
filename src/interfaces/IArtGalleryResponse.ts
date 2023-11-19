@@ -7,7 +7,7 @@ export interface IArtGalleryArtworkModel {
   id: number;
   api_model: string;
   api_link: string;
-  is_boosted: false;
+  is_boosted: boolean;
   title: string;
   alt_titles: null;
   thumbnail: {
@@ -17,13 +17,13 @@ export interface IArtGalleryArtworkModel {
     alt_text: string;
   } | null;
   main_reference_number: string;
-  has_not_been_viewed_much: false;
+  has_not_been_viewed_much: boolean;
   boost_rank: null;
   date_start: number;
   date_end: number;
   date_display: string;
   date_qualifier_title: string;
-  date_qualifier_id: null;
+  date_qualifier_id: number | null;
   artist_display: string;
   place_of_origin: string;
   description: null;
@@ -51,15 +51,15 @@ export interface IArtGalleryArtworkModel {
   edition: null;
   publishing_verification_level: string;
   internal_department_id: number;
-  fiscal_year: null;
+  fiscal_year: number | null;
   fiscal_year_deaccession: null;
-  is_public_domain: false;
-  is_zoomable: true;
+  is_public_domain: boolean;
+  is_zoomable: boolean;
   max_zoom_window_size: number;
   copyright_notice: string;
-  has_multimedia_resources: false;
-  has_educational_resources: false;
-  has_advanced_imaging: false;
+  has_multimedia_resources: boolean;
+  has_educational_resources: boolean;
+  has_advanced_imaging: boolean;
   colorfulness: number;
   color: {
     h: number;
@@ -71,7 +71,7 @@ export interface IArtGalleryArtworkModel {
   latitude: null;
   longitude: null;
   latlon: null;
-  is_on_view: false;
+  is_on_view: boolean;
   on_loan_display: string;
   gallery_title: null;
   gallery_id: null;
