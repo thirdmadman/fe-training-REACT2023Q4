@@ -1,6 +1,6 @@
 import { ICardData } from '../interfaces/ICardData';
-import { openDetails } from '../redux/features/detailsSlice';
-import { useAppDispatch } from '../redux/hooks';
+import { openDetails } from '../../old/src/redux/features/detailsSlice';
+import { useAppDispatch } from '../../old/src/redux/hooks';
 
 export function Card(props: ICardData) {
   const {

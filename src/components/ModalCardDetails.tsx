@@ -1,12 +1,12 @@
 import { LoadingSpinner } from './LoadingSpinner';
 import { useParams } from 'react-router-dom';
 import { ErrorCard } from './ErrorCard';
-import { useAppDispatch } from '../redux/hooks';
-import { useGetOneArtQuery } from '../redux/api/apiSlice';
-import { closeDetails, openDetails } from '../redux/features/detailsSlice';
+import { useAppDispatch } from '../../old/src/redux/hooks';
+import { useGetOneArtQuery } from '../../old/src/redux/api/apiSlice';
+import { closeDetails, openDetails } from '../../old/src/redux/features/detailsSlice';
 import { IDetailedCardData } from '../interfaces/IDetailedCardData';
 import { useEffect } from 'react';
-import { setIsLoadingDetails } from '../redux/features/loadingFlagsSlice';
+import { setIsLoadingDetails } from '../../old/src/redux/features/loadingFlagsSlice';
 
 export function ModalCardDetails() {
   const { id } = useParams<{ id: string }>();

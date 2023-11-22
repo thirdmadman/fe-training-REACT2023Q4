@@ -1,4 +1,4 @@
-import { APP_TITLE } from '../constants';
+import { APP_TITLE } from '../../old/src/constants';
 
 export function Footer() {
   return (

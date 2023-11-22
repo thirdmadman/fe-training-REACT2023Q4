@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { APP_TITLE } from '../constants';
+import { APP_TITLE } from '../../old/src/constants';
 import { SearchBar } from './SearchBar';
 
 export function Header() {

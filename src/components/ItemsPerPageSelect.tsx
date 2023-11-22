@@ -1,5 +1,5 @@
-import { changeItemsPerPage } from '../redux/features/searchSlice';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { changeItemsPerPage } from '../../old/src/redux/features/searchSlice';
+import { useAppDispatch, useAppSelector } from '../../old/src/redux/hooks';
 
 export function ItemsPerPageSelect() {
   const dispatch = useAppDispatch();

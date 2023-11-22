@@ -4,10 +4,10 @@ import { LoadingSpinner } from './LoadingSpinner';
 import { IPaginatedArray } from '../interfaces/IPaginatedArray';
 import { Pagination } from './Pagination';
 import { ErrorCard } from './ErrorCard';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { useSearchArtsQuery } from '../redux/api/apiSlice';
+import { useAppDispatch, useAppSelector } from '../../old/src/redux/hooks';
+import { useSearchArtsQuery } from '../../old/src/redux/api/apiSlice';
 import { useEffect } from 'react';
-import { setIsLoadingArts } from '../redux/features/loadingFlagsSlice';
+import { setIsLoadingArts } from '../../old/src/redux/features/loadingFlagsSlice';
 
 export interface ICardsListProps {
   listName: string;

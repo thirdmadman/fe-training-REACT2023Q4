@@ -2,15 +2,15 @@ import { useCallback, useEffect } from 'react';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { CardsList } from '../components/CardsList';
-import { CARDS_COUNT_PER_PAGE } from '../constants';
+import { CARDS_COUNT_PER_PAGE } from '../../old/src/constants';
 import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   IMainSearchParams,
   mergeSearchParams,
-} from '../utils/mergeSearchParams';
-import { getQueryFormLocalStorage } from '../utils/querySaveTools';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { changeSearch } from '../redux/features/searchSlice';
+} from '../../old/src/utils/mergeSearchParams';
+import { getQueryFormLocalStorage } from '../../old/src/utils/querySaveTools';
+import { useAppDispatch, useAppSelector } from '../../old/src/redux/hooks';
+import { changeSearch } from '../../old/src/redux/features/searchSlice';
 
 export function MainPage() {
   const navigate = useNavigate();

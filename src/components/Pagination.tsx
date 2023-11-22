@@ -1,7 +1,7 @@
-import { useSearchArtsQuery } from '../redux/api/apiSlice';
-import { changePaginationPage } from '../redux/features/searchSlice';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { calculatePagination } from '../utils/calculatePagination';
+import { useSearchArtsQuery } from '../../old/src/redux/api/apiSlice';
+import { changePaginationPage } from '../../old/src/redux/features/searchSlice';
+import { useAppDispatch, useAppSelector } from '../../old/src/redux/hooks';
+import { calculatePagination } from '../../old/src/utils/calculatePagination';
 import { ItemsPerPageSelect } from './ItemsPerPageSelect';
 
 export function Pagination() {

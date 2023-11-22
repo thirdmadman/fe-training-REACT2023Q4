@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { changeSearchString } from '../redux/features/searchSlice';
+import { useAppDispatch, useAppSelector } from '../../old/src/redux/hooks';
+import { changeSearchString } from '../../old/src/redux/features/searchSlice';
 export function SearchBar() {
   const dispatch = useAppDispatch();
 
