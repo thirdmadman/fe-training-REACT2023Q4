@@ -34,7 +34,7 @@ export function Card(props: ICardData) {
   return (
     <div
       className="w-full max-w-sm mx-auto rounded-md shadow-md overflow-hidden"
-      onClick={openDetailsEvent}
+      onClick={() => openDetailsEvent()}
     >
       <div
         className="h-56 w-full bg-cover overflow-hidden relative"
@@ -55,7 +55,7 @@ export function Card(props: ICardData) {
         />
         <button
           className="absolute right-3 top-3 p-2 rounded-full bg-blue-600 text-white hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
-          onClick={openImageInNewTab}
+          onClick={(e) => openImageInNewTab(e)}
         >
           <svg
             className="h-5 w-5 m-1"

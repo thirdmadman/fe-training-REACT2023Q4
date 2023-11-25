@@ -5,7 +5,7 @@ import { PageLayout } from '@/components/shared/PageLayout';
 import { apiSlice } from '@/redux/api/apiSlice';
 import { changeSearch } from '@/redux/features/searchSlice';
 import { wrapper } from '@/redux/store';
-import { GetServerSideProps, InferGetServerSidePropsType } from 'next/types';
+import { GetServerSideProps } from 'next/types';
 import { ParsedUrlQuery } from 'querystring';
 import { ReactElement } from 'react';
 
@@ -47,7 +47,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
     await Promise.all(store.dispatch(apiSlice.util.getRunningQueriesThunk()));
 
-    console.log('store :>> ', store.getState());
     return {
       props: {},
     };

@@ -4,6 +4,7 @@ import { useAppSelector } from '@/redux/hooks';
 import { useGetOneArtQuery } from '@/redux/api/apiSlice';
 import { ErrorCard } from './ErrorCard';
 import { useRouter } from 'next/router';
+import Image from 'next/image';
 
 
 export function ModalCardDetails() {
@@ -77,7 +78,10 @@ export function ModalCardDetails() {
         </p>
         <p className="text-l mt-5">Type: {artworkTypeTitle || 'none'}</p>
         <p className="text-l mt-5">Style: {styleTitle || 'none'}</p>
-        <img src={imageUrl} alt={title} className="max-h-[50vh] mt-5"></img>
+        <div className='relative'>
+        <Image src={imageUrl} alt={title} className="w-auto max-h-[50vh] mt-5" width={1000} height={1000}/>
+        </div>
+        
       </section>
     );
   };
@@ -85,7 +89,7 @@ export function ModalCardDetails() {
   return (
     <div
       className="min-w-full min-h-screen fixed flex justify-end bg-gray-600 bg-opacity-50 z-10 overflow-y-auto"
-      onClick={closeModal}
+      onClick={() => closeModal()}
     >
       <div
         className="max-w-[50%] w-full bg-white flex flex-col"
@@ -96,7 +100,7 @@ export function ModalCardDetails() {
         <button
           type="button"
           className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-          onClick={closeModal}
+          onClick={() =>closeModal()}
         >
           <span className="sr-only">Close details</span>
           <svg

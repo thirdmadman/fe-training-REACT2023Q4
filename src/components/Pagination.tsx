@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 export function Pagination() {
   const router = useRouter();
+  
   const setPageEvent = (page: number) => {
     router.push({
       pathname: router.pathname,
