@@ -3,8 +3,9 @@ import { apiSlice } from '@/redux/api/apiSlice';
 import { openDetails } from '@/redux/features/detailsSlice';
 import { wrapper } from '@/redux/store';
 import { GetServerSideProps } from 'next/types';
-import MainPage, { extractQueryFromContext } from '..';
+import MainPage from '..';
 import { changeSearch } from '@/redux/features/searchSlice';
+import { extractQueryFromContext } from '@/utils/extractQueryFromContext';
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
@@ -32,7 +33,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
       props: {},
     };
   }
-) satisfies GetServerSideProps<{}>;
+) satisfies GetServerSideProps<object>;
 
 export default function DetailsPage({}) {
   return <MainPage props={<ModalCardDetails />} />;

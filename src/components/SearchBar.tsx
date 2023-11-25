@@ -12,14 +12,6 @@ export function SearchBar() {
     setSearch(searchString);
   }, [searchString]);
 
-  const clearInput = () => {
-    setSearch('');
-  };
-
-  const onValueInputChanged = (value: string) => {
-    setSearch(value);
-  };
-
   const onSearchFired = () => {
     router.push({
       pathname: router.pathname,
@@ -28,6 +20,14 @@ export function SearchBar() {
         search: search,
       },
     });
+  };
+
+  const clearInput = () => {
+    setSearch('');
+  };
+
+  const onValueInputChanged = (value: string) => {
+    setSearch(value);
   };
 
   return (
@@ -48,13 +48,19 @@ export function SearchBar() {
             />
           </svg>
         </span>
+        <label htmlFor="search" className="sr-only">
+          Search on site
+        </label>
         <input
+          id="search"
           className="w-full border rounded-md pl-10 pr-4 py-2 focus:border-blue-500 focus:outline-none focus:shadow-outline"
           type="text"
           placeholder="Search"
           onInput={(e) => onValueInputChanged(e.currentTarget.value)}
           value={search}
+          aria-label="Search"
         />
+
         <button
           className="absolute text-xl inset-y-0 right-0 pr-4 flex items-center"
           onClick={() => clearInput()}

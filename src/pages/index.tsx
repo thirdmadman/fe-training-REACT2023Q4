@@ -5,39 +5,13 @@ import { PageLayout } from '@/components/shared/PageLayout';
 import { apiSlice } from '@/redux/api/apiSlice';
 import { changeSearch } from '@/redux/features/searchSlice';
 import { wrapper } from '@/redux/store';
+import { extractQueryFromContext } from '@/utils/extractQueryFromContext';
 import { GetServerSideProps } from 'next/types';
-import { ParsedUrlQuery } from 'querystring';
+
 import { ReactElement } from 'react';
-
-interface UrlQueryForPage extends ParsedUrlQuery {
-  search?: string;
-  page?: string;
-  count?: string;
-}
-
-export const extractQueryFromContext = (query: ParsedUrlQuery) => {
-  const queryTyped =  query as UrlQueryForPage;
-
-  const querySearchString = queryTyped?.search;
-  const queryPaginationPage = queryTyped?.page
-    ? parseInt(queryTyped.page, 10)
-    : undefined;
-  const queryItemsPerPage = queryTyped?.count
-    ? parseInt(queryTyped.count, 10)
-    : undefined;
-
-  const searchArtsQuery = {
-    searchString: querySearchString || '',
-    paginationPage: queryPaginationPage || 1,
-    itemsPerPage: queryItemsPerPage || 12,
-  };
-
-  return searchArtsQuery;
-}
 
 export const getServerSideProps = wrapper.getServerSideProps(
   (store) => async (context) => {
-
     const searchArtsQuery = extractQueryFromContext(context.query);
 
     store.dispatch(changeSearch(searchArtsQuery));
@@ -51,9 +25,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
       props: {},
     };
   }
-) satisfies GetServerSideProps<{}>;
+) satisfies GetServerSideProps<object>;
 
-export default function MainPage({props} : {props: ReactElement | undefined}) {
+export default function MainPage({
+  props,
+}: {
+  props: ReactElement | undefined;
+}) {
   return (
     <PageLayout>
       <>

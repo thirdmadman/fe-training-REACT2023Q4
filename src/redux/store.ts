@@ -36,4 +36,4 @@ export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];
 
 // export an assembled wrapper
-export const wrapper = createWrapper(() => store, {debug: false});
+export const wrapper = createWrapper(() => store, { debug: false });

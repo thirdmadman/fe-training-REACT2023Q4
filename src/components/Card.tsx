@@ -41,8 +41,8 @@ export function Card(props: ICardData) {
         style={
           imagePlaceholder
             ? {
-                backgroundImage: `url("${imagePlaceholder}")`,
-              }
+              backgroundImage: `url("${imagePlaceholder}")`,
+            }
             : undefined
         }
       >
@@ -56,6 +56,7 @@ export function Card(props: ICardData) {
         <button
           className="absolute right-3 top-3 p-2 rounded-full bg-blue-600 text-white hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
           onClick={(e) => openImageInNewTab(e)}
+          aria-label="open image"
         >
           <svg
             className="h-5 w-5 m-1"

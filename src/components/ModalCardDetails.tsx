@@ -6,7 +6,6 @@ import { ErrorCard } from './ErrorCard';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 
-
 export function ModalCardDetails() {
   const router = useRouter();
   const details = useAppSelector((state) => state.details);
@@ -14,14 +13,14 @@ export function ModalCardDetails() {
   const id = details.openedCardId;
 
   const { data, isError, isFetching, isUninitialized } = useGetOneArtQuery(
-    (id) || 0,
+    id || 0,
     { skip: !id }
   );
 
   const closeModal = () => {
     delete router.query.id;
     router.push({
-      pathname: `/`,
+      pathname: '/',
       query: {
         ...router.query,
       },
@@ -78,10 +77,15 @@ export function ModalCardDetails() {
         </p>
         <p className="text-l mt-5">Type: {artworkTypeTitle || 'none'}</p>
         <p className="text-l mt-5">Style: {styleTitle || 'none'}</p>
-        <div className='relative'>
-        <Image src={imageUrl} alt={title} className="w-auto max-h-[50vh] mt-5" width={1000} height={1000}/>
+        <div className="relative">
+          <Image
+            src={imageUrl}
+            alt={title}
+            className="w-auto max-h-[50vh] mt-5"
+            width={1000}
+            height={1000}
+          />
         </div>
-        
       </section>
     );
   };
@@ -100,7 +104,7 @@ export function ModalCardDetails() {
         <button
           type="button"
           className="bg-white rounded-md p-2 inline-flex items-center justify-center text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500"
-          onClick={() =>closeModal()}
+          onClick={() => closeModal()}
         >
           <span className="sr-only">Close details</span>
           <svg
