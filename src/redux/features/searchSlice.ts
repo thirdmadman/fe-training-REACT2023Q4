@@ -2,7 +2,7 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { CARDS_COUNT_PER_PAGE } from '../../constants';
 import { HYDRATE } from 'next-redux-wrapper';
 
-interface ISearchState {
+export interface ISearchState {
   searchString: string;
   paginationPage: number;
   itemsPerPage: number;
