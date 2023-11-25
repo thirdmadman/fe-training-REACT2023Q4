@@ -34,7 +34,6 @@ export const apiSlice = createApi({
   endpoints: (builder) => ({
     searchArts: builder.query<IPaginatedArray<ICardData>, ISearchState>({
       query: ({ searchString, paginationPage, itemsPerPage }) => {
-        console.log('this is req:>> ');
         const pageNumber = paginationPage || 1;
         const limitNumber = itemsPerPage || CARDS_COUNT_PER_PAGE;
 
