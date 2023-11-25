@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../old/src/redux/hooks';
-import { changeSearchString } from '../../old/src/redux/features/searchSlice';
-export function SearchBar() {
-  const dispatch = useAppDispatch();
+import { useAppSelector } from '../redux/hooks';
+import { useRouter } from 'next/router';
 
+export function SearchBar() {
+  const router = useRouter();
   const searchString = useAppSelector((state) => state.search.searchString);
 
   const [search, setSearch] = useState(searchString);
@@ -21,7 +21,13 @@ export function SearchBar() {
   };
 
   const onSearchFired = () => {
-    dispatch(changeSearchString(search));
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        search: search,
+      },
+    });
   };
 
   return (

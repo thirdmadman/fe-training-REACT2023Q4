@@ -1,13 +1,19 @@
-import { useSearchArtsQuery } from '../../old/src/redux/api/apiSlice';
-import { changePaginationPage } from '../../old/src/redux/features/searchSlice';
-import { useAppDispatch, useAppSelector } from '../../old/src/redux/hooks';
-import { calculatePagination } from '../../old/src/utils/calculatePagination';
+import { useAppSelector } from '@/redux/hooks';
 import { ItemsPerPageSelect } from './ItemsPerPageSelect';
+import { useSearchArtsQuery } from '@/redux/api/apiSlice';
+import { calculatePagination } from '@/utils/calculatePagination';
+import { useRouter } from 'next/router';
 
 export function Pagination() {
-  const dispatch = useAppDispatch();
+  const router = useRouter();
   const setPageEvent = (page: number) => {
-    dispatch(changePaginationPage(page));
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        page,
+      },
+    });
   };
 
   const search = useAppSelector((state) => state.search);

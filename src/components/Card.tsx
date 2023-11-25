@@ -1,6 +1,4 @@
 import { ICardData } from '../interfaces/ICardData';
-import { openDetails } from '../../old/src/redux/features/detailsSlice';
-import { useAppDispatch } from '../../old/src/redux/hooks';
 
 export function Card(props: ICardData) {
   const {
@@ -13,11 +11,7 @@ export function Card(props: ICardData) {
     id,
   } = props;
 
-  const dispatch = useAppDispatch();
-
-  const openDetailsEvent = () => {
-    dispatch(openDetails(id));
-  };
+  const openDetailsEvent = () => {};
 
   const openImageInNewTab = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -36,8 +30,8 @@ export function Card(props: ICardData) {
         style={
           imagePlaceholder
             ? {
-              backgroundImage: `url("${imagePlaceholder}")`,
-            }
+                backgroundImage: `url("${imagePlaceholder}")`,
+              }
             : undefined
         }
       >

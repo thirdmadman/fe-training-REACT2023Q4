@@ -1,8 +1,9 @@
-import { changeItemsPerPage } from '../../old/src/redux/features/searchSlice';
-import { useAppDispatch, useAppSelector } from '../../old/src/redux/hooks';
+
+import { useRouter } from 'next/router';
+import { useAppSelector } from '../redux/hooks';
 
 export function ItemsPerPageSelect() {
-  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const currentItemsPerPage = useAppSelector(
     (state) => state.search.itemsPerPage
@@ -15,7 +16,13 @@ export function ItemsPerPageSelect() {
   );
 
   const setItemsPerPageEvent = (number: number) => {
-    dispatch(changeItemsPerPage(number));
+    router.push({
+      pathname: router.pathname,
+      query: {
+        ...router.query,
+        count: number,
+      },
+    });
   };
 
   return (
