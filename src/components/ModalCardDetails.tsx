@@ -1,33 +1,30 @@
 import { LoadingSpinner } from './LoadingSpinner';
-import { useParams } from 'react-router-dom';
-import { ErrorCard } from './ErrorCard';
-import { useAppDispatch } from '../../old/src/redux/hooks';
-import { useGetOneArtQuery } from '../../old/src/redux/api/apiSlice';
-import { closeDetails, openDetails } from '../../old/src/redux/features/detailsSlice';
 import { IDetailedCardData } from '../interfaces/IDetailedCardData';
-import { useEffect } from 'react';
-import { setIsLoadingDetails } from '../../old/src/redux/features/loadingFlagsSlice';
+import { useAppSelector } from '@/redux/hooks';
+import { useGetOneArtQuery } from '@/redux/api/apiSlice';
+import { ErrorCard } from './ErrorCard';
+import { useRouter } from 'next/router';
+
 
 export function ModalCardDetails() {
-  const { id } = useParams<{ id: string }>();
+  const router = useRouter();
+  const details = useAppSelector((state) => state.details);
 
-  const dispatch = useAppDispatch();
+  const id = details.openedCardId;
 
   const { data, isError, isFetching, isUninitialized } = useGetOneArtQuery(
-    (id && parseInt(id, 10)) || 0,
+    (id) || 0,
     { skip: !id }
   );
 
-  useEffect(() => {
-    dispatch(setIsLoadingDetails(isFetching));
-  }, [dispatch, isFetching]);
-
-  useEffect(() => {
-    id && dispatch(openDetails(parseInt(id, 10)));
-  });
-
   const closeModal = () => {
-    dispatch(closeDetails());
+    delete router.query.id;
+    router.push({
+      pathname: `/`,
+      query: {
+        ...router.query,
+      },
+    });
   };
 
   const showDetails = (

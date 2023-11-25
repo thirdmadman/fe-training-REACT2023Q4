@@ -1,6 +1,10 @@
+import { useRouter } from 'next/router';
 import { ICardData } from '../interfaces/ICardData';
+import Image from 'next/image';
 
 export function Card(props: ICardData) {
+  const router = useRouter();
+
   const {
     title,
     artistDisplay,
@@ -11,7 +15,14 @@ export function Card(props: ICardData) {
     id,
   } = props;
 
-  const openDetailsEvent = () => {};
+  const openDetailsEvent = () => {
+    router.push({
+      pathname: `${router.pathname}details/${id}`,
+      query: {
+        ...router.query,
+      },
+    });
+  };
 
   const openImageInNewTab = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -35,7 +46,13 @@ export function Card(props: ICardData) {
             : undefined
         }
       >
-        <img className="" src={imageUrl} alt={artistDisplay} />
+        <Image
+          className=""
+          src={imageUrl}
+          alt={artistDisplay}
+          width={384}
+          height={200}
+        />
         <button
           className="absolute right-3 top-3 p-2 rounded-full bg-blue-600 text-white hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
           onClick={openImageInNewTab}
