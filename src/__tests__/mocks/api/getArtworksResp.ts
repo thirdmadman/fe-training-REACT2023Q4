@@ -1,0 +1,210 @@
+import {
+  IArtGalleryArtworkModel,
+  IArtGalleryResponseGetOne,
+  IArtGalleryResponseSearch,
+  IArtGallerySearchData,
+} from '../../../interfaces/IArtGalleryResponse';
+
+const artMock: IArtGallerySearchData = {
+  _score: 10864.31,
+  thumbnail: {
+    alt_text:
+      'Painting of bedroom, blue walls, green window, tan bed, red bedding.',
+    width: 100,
+    lqip: 'data:image/gif;base64,R0lGODlhBgAFAPQAAHhwV3N+bnh/aXR8dJtsG6VsAJx4IIp8PIx0QYZ2SoZ/bIx+b3CGboiAQoKAVoWAVpiLYZqNYIiAcoeIc5SNdJeJfJiKfXyCgneAkXmLp3eFqomMgIWJmZOerAAAAAAAACH5BAAAAAAALAAAAAAGAAUAAAUYoMYEXJdhgwBF1wM4RIE01HYYiVJZk7SEADs=',
+    height: 100,
+  },
+  artwork_type_title: 'Painting',
+  artist_display: 'Vincent van Gogh\nDutch, 1853-1890',
+  date_display: '1889',
+  id: 28560,
+  image_id: '25c31d8d-21a4-9ea1-1d73-6a2eca4dda7e',
+  title: 'The Bedroom',
+};
+
+export const data: IArtGalleryResponseSearch = {
+  preference: null,
+  pagination: {
+    total: 58115,
+    limit: 12,
+    offset: 0,
+    total_pages: 4843,
+    current_page: 1,
+    next_url: '',
+  },
+  data: [artMock],
+  info: {
+    license_text:
+      'The `description` field in this response is licensed under a Creative Commons Attribution 4.0 Generic License (CC-By) and the Terms and Conditions of artic.edu. All other data in this response is licensed under a Creative Commons Zero (CC0) 1.0 designation and the Terms and Conditions of artic.edu.',
+    license_links: [
+      'https://creativecommons.org/publicdomain/zero/1.0/',
+      'https://www.artic.edu/terms',
+    ],
+    version: 1.9,
+  },
+  config: {
+    iiif_url: 'https://www.artic.edu/iiif/2',
+    website_url: 'http://www.artic.edu',
+  },
+};
+
+export const getArtworksResp = () => data;
+
+const detailedArtMock: IArtGalleryArtworkModel = {
+  id: 24674,
+  api_model: 'artworks',
+  api_link: 'https://api.artic.edu/api/v1/artworks/24674',
+  is_boosted: false,
+  title: 'The Oude Kerk, Delft',
+  alt_titles: null,
+  thumbnail: {
+    lqip: 'data:image/gif;base64,R0lGODlhBgAFAPQAAD4wE0Q0Gk84GFE4GGFMKW9ULWZUOmxXOXRZM3pdNnRgP3ZhPmhZQXdfQHhnR4BhM4doOYdrQ4BtToRvT5d3RIRvUYZ0U5J/XJJ9YJWDX5GAZJ6HZKaVebOhgQAAAAAAACH5BAAAAAAALAAAAAAGAAUAAAUYoMVl16JMzdZJjHNgWmUQRYJEEBAIw0OFADs=',
+    width: 2671,
+    height: 2250,
+    alt_text: 'A work made of oil on canvas.',
+  },
+  main_reference_number: '1965.1176',
+  has_not_been_viewed_much: false,
+  boost_rank: null,
+  date_start: 1655,
+  date_end: 1665,
+  date_display: '1660/70',
+  date_qualifier_title: 'Made',
+  date_qualifier_id: 4,
+  artist_display: 'Cornelis de Man\nDutch, 1621-1706',
+  place_of_origin: 'Holland',
+  description: null,
+  dimensions: '64.1 \u00d7 77.4 cm (25 1/2 \u00d7 30 1/2 in.)',
+  dimensions_detail: [
+    {
+      depth_cm: 0,
+      depth_in: 0,
+      width_cm: 77.4,
+      width_in: 30.5,
+      height_cm: 64.1,
+      height_in: 25.5,
+      diameter_cm: 0,
+      diameter_in: 0,
+      clarification: null,
+    },
+  ],
+  medium_display: 'Oil on canvas',
+  inscriptions: null,
+  credit_line: 'Gift of Mr. and Mrs. Morris I. Kaplan',
+  catalogue_display: null,
+  publication_history:
+    'John Maxon, "Some Recent Acquisitions," Apollo 84 (Sept. 1966), p. 221, fig. 9\n\nTimothy Trent Blade, "Two Interior Views of the Old Church in Delft," Art Institute of Chicago Museum Studies 6 (1971), pp. 37-49, figs. 2, 8\n\nWalter A. Liedtke,  Architectural Painting in Delft: Gerard Houckgeest, Hendrick van Vliet, Emanuel de Witte, Doornspijk, 1982,  p,. 43, figs. 30, 100.\n\nWalter A. Liedtke, "Cornelis de Man as a Painter of Church Interiors," Tableau 5, no. 1 (1982) p. 65, ill. p. 64, no. 4.\n\nPeter C. Sutton, A Guide to Dutch Art in America (Grand Rapids, Michigan, 1986), pp. 52, 341.',
+  exhibition_history:
+    'Stedelijk Museum, Delft, Delft Masters: Vermeers Contemporaries, March 1-June 2, 1996, 8384, ill, 68.',
+  provenance_text:
+    'Mr. and Mrs. Morris I. Kaplan, Chicago, by 1965; given to the Art Institute, 1965.',
+  edition: null,
+  publishing_verification_level: 'Web Cataloged',
+  internal_department_id: 14,
+  fiscal_year: 1966,
+  fiscal_year_deaccession: null,
+  is_public_domain: false,
+  is_zoomable: true,
+  max_zoom_window_size: -1,
+  copyright_notice: '',
+  has_multimedia_resources: false,
+  has_educational_resources: false,
+  has_advanced_imaging: false,
+  colorfulness: 31.953,
+  color: {
+    h: 38,
+    l: 48,
+    s: 38,
+    percentage: 0.018378360316107796,
+    population: 110,
+  },
+  latitude: null,
+  longitude: null,
+  latlon: null,
+  is_on_view: false,
+  on_loan_display: '',
+  gallery_title: null,
+  gallery_id: null,
+  nomisma_id: null,
+  artwork_type_title: 'Painting',
+  artwork_type_id: 1,
+  department_title: 'Painting and Sculpture of Europe',
+  department_id: 'PC-10',
+  artist_id: 16053,
+  artist_title: 'Cornelis de Man',
+  alt_artist_ids: [],
+  artist_ids: [16053],
+  artist_titles: ['Cornelis de Man'],
+  category_ids: ['PC-10'],
+  category_titles: ['Painting and Sculpture of Europe'],
+  term_titles: ['oil on canvas', 'painting', 'european painting'],
+  style_id: null,
+  style_title: null,
+  alt_style_ids: [],
+  style_ids: [],
+  style_titles: [],
+  classification_id: 'TM-66',
+  classification_title: 'oil on canvas',
+  alt_classification_ids: ['TM-9', 'TM-54'],
+  classification_ids: ['TM-66', 'TM-9', 'TM-54'],
+  classification_titles: ['oil on canvas', 'painting', 'european painting'],
+  subject_id: null,
+  alt_subject_ids: [],
+  subject_ids: [],
+  subject_titles: [],
+  material_id: '',
+  alt_material_ids: [],
+  material_ids: [],
+  material_titles: [],
+  technique_id: null,
+  alt_technique_ids: [],
+  technique_ids: [],
+  technique_titles: [],
+  theme_titles: [],
+  image_id: 'c68a078e-b4c1-7ea8-d37a-a30c7c28f94e',
+  alt_image_ids: [],
+  document_ids: [],
+  sound_ids: [],
+  video_ids: [],
+  text_ids: [],
+  section_ids: [],
+  section_titles: [],
+  site_ids: [],
+  suggest_autocomplete_all: [
+    {
+      input: ['1965.1176'],
+      contexts: {
+        groupings: ['accession'],
+      },
+    },
+    {
+      input: ['The Oude Kerk, Delft'],
+      weight: 1409,
+      contexts: {
+        groupings: ['title'],
+      },
+    },
+  ],
+  source_updated_at: '2023-08-29T15:17:51-05:00',
+  updated_at: '2023-08-29T15:24:45-05:00',
+  timestamp: '2023-11-19T11:47:46-06:00',
+};
+
+export const detailedDataMock: IArtGalleryResponseGetOne = {
+  data: detailedArtMock,
+  info: {
+    license_text:
+      'The `description` field in this response is licensed under a Creative Commons Attribution 4.0 Generic License (CC-By) and the Terms and Conditions of artic.edu. All other data in this response is licensed under a Creative Commons Zero (CC0) 1.0 designation and the Terms and Conditions of artic.edu.',
+    license_links: [
+      'https://creativecommons.org/publicdomain/zero/1.0/',
+      'https://www.artic.edu/terms',
+    ],
+    version: 1.9,
+  },
+  config: {
+    iiif_url: 'https://www.artic.edu/iiif/2',
+    website_url: 'http://www.artic.edu',
+  },
+};
+
+export const getOneArtResponseMock = () => detailedDataMock;
