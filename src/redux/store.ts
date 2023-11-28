@@ -4,10 +4,10 @@ import {
   configureStore,
 } from '@reduxjs/toolkit';
 
-import exampleReducer, { exampleSlice } from './features/exampleSlice';
+import mainPageReducer, { mainPageSlice } from './features/mainPageSlice';
 
 const reducers = {
-  [exampleSlice.name]: exampleReducer,
+  [mainPageSlice.name]: mainPageReducer,
 };
 
 const combinedReducer = combineReducers<typeof reducers>(reducers);
