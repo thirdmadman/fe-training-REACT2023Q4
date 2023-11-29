@@ -3,20 +3,7 @@ import { useAppDispatch } from '../redux/hooks';
 import { ISavedFormData, saveFormData } from '../redux/features/mainPageSlice';
 import { boolean, number, object, ref, string, ValidationError } from 'yup';
 import { IFormDataOptional } from '../interfaces/IFormData';
-
-const convertBase64 = async (file: File) => {
-  return new Promise<string | ArrayBuffer | null>((resolve, reject) => {
-    const fileReader = new FileReader();
-    fileReader.readAsDataURL(file);
-    fileReader.onload = () => {
-      resolve(fileReader.result);
-    };
-    fileReader.onerror = (error) => {
-      reject(null);
-      console.error(error);
-    };
-  });
-};
+import { convertFileToBase64 } from '../utils/convertFileToBase64';
 
 export function UncontrolledForm() {
   const nameInput = useRef<HTMLInputElement>(null);
@@ -35,7 +22,7 @@ export function UncontrolledForm() {
     let userPictureData: string | undefined;
 
     if (userPictureInput.current?.files) {
-      const tmp = await convertBase64(userPictureInput.current.files[0]);
+      const tmp = await convertFileToBase64(userPictureInput.current.files[0]);
       if (typeof tmp === 'string') {
         userPictureData = tmp;
       }
