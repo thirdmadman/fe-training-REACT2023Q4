@@ -22,7 +22,7 @@ export function GenericUncontrolledInput({
       return;
     }
 
-    return errors.map((el) => (
+    return errors.slice(0, 1).map((el) => (
       <p className="mt-2 text-sm text-red-600 dark:text-red-500" key={el}>
         {el}
       </p>
