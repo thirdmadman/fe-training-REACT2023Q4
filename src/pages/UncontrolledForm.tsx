@@ -3,15 +3,17 @@ import { useAppDispatch } from '../redux/hooks';
 import { ISavedFormData, saveFormData } from '../redux/features/mainPageSlice';
 import { IFormDataOptional } from '../interfaces/IFormData';
 import { convertFileToBase64 } from '../utils/convertFileToBase64';
-import { GenericUncontrolledInput } from '../components/GenericUncotrolledInput';
+import { GenericUncontrolledInput } from '../components/uncontrolledComponents/GenericUncotrolledInput';
 import { validateFormData } from '../utils/validateFormData';
+import { GenderInput } from '../components/uncontrolledComponents/GenderInput';
+import { CheckBoxInput } from '../components/uncontrolledComponents/CheckBoxInput';
 
 type TFormInputErrors = Partial<Record<keyof IFormDataOptional, Array<string>>>;
 
 export function UncontrolledForm() {
   const nameInput = useRef<HTMLInputElement>(null);
   const ageInput = useRef<HTMLInputElement>(null);
-  const genderInput = useRef<HTMLInputElement>(null);
+  const genderInput = useRef<HTMLSelectElement>(null);
   const countryInput = useRef<HTMLInputElement>(null);
   const emailInput = useRef<HTMLInputElement>(null);
   const passwordInput = useRef<HTMLInputElement>(null);
@@ -39,12 +41,14 @@ export function UncontrolledForm() {
       }
     }
 
+    const genderInputValue = genderInput.current?.value;
+
     const formData = {
       name: nameInput.current?.value,
       age: ageInput.current?.value
         ? parseInt(ageInput.current.value, 10)
         : undefined,
-      gender: genderInput.current?.value,
+      gender: genderInputValue === 'null' ? undefined : genderInputValue,
       country: countryInput.current?.value,
       email: emailInput.current?.value,
       password: passwordInput.current?.value,
@@ -86,7 +90,13 @@ export function UncontrolledForm() {
   return (
     <div>
       <h2>UncontrolledForm</h2>
-      <form className="max-w-sm mx-auto" onSubmit={onSubmitEvent}>
+      <form
+        className="max-w-sm mx-auto"
+        onSubmit={(e) => {
+          e.preventDefault();
+          onSubmitEvent();
+        }}
+      >
         <GenericUncontrolledInput
           errors={errors?.email}
           id="email"
@@ -125,10 +135,10 @@ export function UncontrolledForm() {
           inputRef={ageInput}
         />
 
-        <GenericUncontrolledInput
+        <GenderInput
           errors={errors?.gender}
           id="gender"
-          type="text"
+          label="Select your gender"
           placeholder="Input your gender"
           inputRef={genderInput}
         />
@@ -165,27 +175,23 @@ export function UncontrolledForm() {
           </div>
         </div>
 
-        <div className="flex items-center mb-4">
-          <input
-            id="checkbox-1"
-            type="checkbox"
-            ref={acceptTCRepeatInput}
-            className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-          />
-          <label
-            htmlFor="checkbox-1"
-            className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-          >
-            I agree to the{' '}
-            <a
-              href="#"
-              className="text-blue-600 hover:underline dark:text-blue-500"
-            >
-              terms and conditions
-            </a>
-            .{extractErrors(errors?.acceptTC)}
-          </label>
-        </div>
+        <CheckBoxInput
+          label={
+            <>
+              I agree to the{' '}
+              <a
+                href="#"
+                className="text-blue-600 hover:underline dark:text-blue-500"
+              >
+                terms and conditions
+              </a>
+              .
+            </>
+          }
+          errors={errors?.acceptTC}
+          id="acceptTC"
+          inputRef={acceptTCRepeatInput}
+        />
 
         <button
           type="submit"
