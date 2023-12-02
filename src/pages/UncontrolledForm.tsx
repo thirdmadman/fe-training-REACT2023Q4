@@ -1,9 +1,10 @@
 import { useRef, useState } from 'react';
 import { useAppDispatch } from '../redux/hooks';
 import { ISavedFormData, saveFormData } from '../redux/features/mainPageSlice';
-import { boolean, number, object, ref, string, ValidationError } from 'yup';
 import { IFormDataOptional } from '../interfaces/IFormData';
 import { convertFileToBase64 } from '../utils/convertFileToBase64';
+import { GenericUncontrolledInput } from '../components/GenericUncotrolledInput';
+import { validateFormData } from '../utils/validateFormData';
 
 type TFormInputErrors = Partial<Record<keyof IFormDataOptional, Array<string>>>;
 
@@ -55,71 +56,6 @@ export function UncontrolledForm() {
     return formData;
   };
 
-  const validateFormData = async (dataToValidate: IFormDataOptional) => {
-    const userSchema = object({
-      name: string().label('Name').required(),
-      age: number().label('Age').required().positive().integer(),
-      gender: string().label('Gender').required(),
-      country: string().label('Country').required(),
-      email: string().label('Email').required().email(),
-      password: string()
-        .label('Password')
-        .required()
-        .test({
-          name: 'max',
-          message: '${path} must contain at least 1 character',
-          test: (value) => /^(?=.*[a-z]).+/.test(value),
-        })
-        .test({
-          name: 'max',
-          message: '${path} must contain at least 1 uppercase character',
-          test: (value) => /^(?=.*[a-z]).+/.test(value),
-        })
-        .test({
-          name: 'max',
-          message: '${path} must contain at least 1 digit',
-          test: (value) => /^(?=.*[0-9]).+/.test(value),
-        })
-        .test({
-          name: 'max',
-          message: '${path} must contain at least 1 special character',
-          test: (value) => /^(?=.*[\W]).+/.test(value),
-        }),
-      passwordRepeat: string()
-        .label('Password')
-        .required()
-        .oneOf([ref('password')], 'Passwords must match'),
-      acceptTC: boolean()
-        .label('Accept of T&C')
-        .required()
-        .isTrue('You must accept T&C'),
-      userPicture: string().label('User picture').required(),
-    });
-
-    try {
-      const formData = await userSchema.validate(dataToValidate, {
-        abortEarly: false,
-      });
-      return { formData };
-    } catch (ex) {
-      if (!(ex instanceof ValidationError)) {
-        throw new Error('Not a validation error');
-      }
-
-      const errors: Record<string, string[]> = {};
-
-      ex.inner.forEach((element) => {
-        const path = element.path || 'root';
-
-        errors[path]
-          ? errors[path].push(element.message)
-          : (errors[path] = [element.message]);
-      });
-
-      return { errors };
-    }
-  };
-
   const onSubmitEvent = async () => {
     console.log('onSubmitEvent');
     const formData = await extractFromData();
@@ -151,87 +87,60 @@ export function UncontrolledForm() {
     <div>
       <h2>UncontrolledForm</h2>
       <form className="max-w-sm mx-auto" onSubmit={onSubmitEvent}>
-        <div className="mb-5">
-          <label
-            htmlFor="email"
-            className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >
-            <input
-              id="email"
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="email"
-              placeholder="Input your email"
-              ref={emailInput}
-            />
-            {extractErrors(errors?.email)}
-          </label>
-        </div>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              placeholder="Input your password"
-              ref={passwordInput}
-            />
-            {extractErrors(errors?.password)}
-          </label>
-        </div>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              placeholder="Repeat your password"
-              ref={passwordRepeatInput}
-            />
-            {extractErrors(errors?.passwordRepeat)}
-          </label>
-        </div>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              placeholder="Input your name"
-              ref={nameInput}
-            />
-            {extractErrors(errors?.name)}
-          </label>
-        </div>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              placeholder="Input your age"
-              ref={ageInput}
-            />
-            {extractErrors(errors?.age)}
-          </label>
-        </div>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              placeholder="Input your gender"
-              ref={genderInput}
-            />
-            {extractErrors(errors?.gender)}
-          </label>
-        </div>
-        <div className="mb-5">
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-            <input
-              className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-              type="text"
-              placeholder="Input your country"
-              ref={countryInput}
-            />
-            {extractErrors(errors?.country)}
-          </label>
-        </div>
+        <GenericUncontrolledInput
+          errors={errors?.email}
+          id="email"
+          type="email"
+          placeholder="Input your email"
+          inputRef={emailInput}
+        />
+        <GenericUncontrolledInput
+          errors={errors?.password}
+          id="password"
+          type="password"
+          placeholder="Input your password"
+          inputRef={passwordInput}
+        />
+        <GenericUncontrolledInput
+          errors={errors?.passwordRepeat}
+          id="password-repeat"
+          type="password"
+          placeholder="Repeat your password"
+          inputRef={passwordRepeatInput}
+        />
+
+        <GenericUncontrolledInput
+          errors={errors?.name}
+          id="name"
+          type="text"
+          placeholder="Input your name"
+          inputRef={nameInput}
+        />
+
+        <GenericUncontrolledInput
+          errors={errors?.age}
+          id="age"
+          type="text"
+          placeholder="Input your age"
+          inputRef={ageInput}
+        />
+
+        <GenericUncontrolledInput
+          errors={errors?.gender}
+          id="gender"
+          type="text"
+          placeholder="Input your gender"
+          inputRef={genderInput}
+        />
+
+        <GenericUncontrolledInput
+          errors={errors?.country}
+          id="country"
+          type="text"
+          placeholder="Input your country"
+          inputRef={countryInput}
+        />
+
         <div className="mb-5">
           <label
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
