@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/thirdmadman/fe-training-REACT2023Q4#readme",
   "dependencies": {
+    "@hookform/resolvers": "^3.3.2",
     "@reduxjs/toolkit": "^1.9.7",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
