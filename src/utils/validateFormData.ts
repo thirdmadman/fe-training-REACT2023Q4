@@ -1,5 +1,5 @@
-import { IFormDataOptional } from '../interfaces/IFormData';
 import { boolean, number, object, ref, string, ValidationError } from 'yup';
+import { IFormDataOptional } from '../interfaces/IFormData';
 
 export async function validateFormData(dataToValidate: IFormDataOptional) {
   const userSchema = object({
@@ -19,7 +19,7 @@ export async function validateFormData(dataToValidate: IFormDataOptional) {
       .test({
         name: 'max',
         message: '${path} must contain at least 1 uppercase character',
-        test: (value) => /^(?=.*[a-z]).+/.test(value),
+        test: (value) => /^(?=.*[A-Z]).+/.test(value),
       })
       .test({
         name: 'max',
