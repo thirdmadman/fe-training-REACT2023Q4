@@ -174,6 +174,7 @@ export function UncontrolledForm() {
             id="user_avatar"
             type="file"
             ref={userPictureInput}
+            accept=".png,.jpg,.jpeg"
           />
           {extractErrors(errors?.userPicture)}
           <div

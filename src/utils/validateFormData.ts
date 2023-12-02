@@ -39,7 +39,13 @@ export async function validateFormData(dataToValidate: IFormDataOptional) {
       .label('Accept of T&C')
       .required()
       .isTrue('You must accept T&C'),
-    userPicture: string().label('User picture').required(),
+    userPicture: string()
+      .label('User picture')
+      .required()
+      .test({
+        message: '${path} must be png or jpg',
+        test: (value) => /^(?=.*image\/(png|jpg|jpeg);base64).+/.test(value),
+      }),
   });
 
   try {
