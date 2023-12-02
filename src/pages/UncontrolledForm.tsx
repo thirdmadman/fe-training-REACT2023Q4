@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useAppDispatch } from '../redux/hooks';
-import { ISavedFormData, saveFormData } from '../redux/features/mainPageSlice';
+import { saveFormData } from '../redux/features/mainPageSlice';
 import { convertFileToBase64 } from '../utils/convertFileToBase64';
 import { GenericUncontrolledInput } from '../components/uncontrolledComponents/GenericUncotrolledInput';
 import { validateFormData } from '../utils/validateFormData';
@@ -73,9 +73,11 @@ export function UncontrolledForm() {
 
     if (validate.errors) {
       setErrors(validate.errors);
+    } else {
+      dispatch(
+        saveFormData({ fromData: validate.formData, type: 'uncontrolled' })
+      );
     }
-
-    dispatch(saveFormData(formData as unknown as ISavedFormData));
   };
 
   const extractErrors = (errors: string[] | undefined) => {
