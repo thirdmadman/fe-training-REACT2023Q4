@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { InputAutocompleteList } from './InputAutocompleteList';
 
 interface ITextInputAutocompleteProps {
@@ -18,6 +18,22 @@ export function TextInputAutocomplete({
 }: ITextInputAutocompleteProps) {
   const [isAutocompleteHidden, setIsAutocompleteHidden] = useState(true);
   const [filterSting, setFilterSting] = useState('');
+
+  useEffect(() => {
+    const func = () => {
+      setTimeout(() => {
+        setIsAutocompleteHidden(true);
+      }, 500);
+    };
+
+    inputRef.current && inputRef.current.addEventListener('focusout', func);
+
+    const ref = inputRef.current;
+
+    return () => {
+      ref && ref.removeEventListener('focusout', func);
+    };
+  }, [inputRef]);
 
   const extractErrors = (errors: string[] | undefined) => {
     if (!errors || !(errors.length > 0)) {
@@ -78,7 +94,10 @@ export function TextInputAutocomplete({
           ref={inputRef}
           autoComplete="off"
           onClick={() => setIsAutocompleteHidden(false)}
-          onChange={(e) => setFilterSting(e.target.value)}
+          onChange={(e) => {
+            setFilterSting(e.target.value);
+            setIsAutocompleteHidden(false);
+          }}
         />
         <InputAutocompleteList
           options={options}
