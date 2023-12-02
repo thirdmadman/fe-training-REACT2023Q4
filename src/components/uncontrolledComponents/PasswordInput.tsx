@@ -58,6 +58,7 @@ export function PasswordInput({
           onChange={(e) =>
             setPasswordStrength(calculatePasswordStrength(e.target.value))
           }
+          autoComplete="on"
         />
         <p
           className={

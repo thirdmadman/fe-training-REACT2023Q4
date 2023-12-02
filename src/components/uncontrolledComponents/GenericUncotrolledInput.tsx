@@ -42,6 +42,7 @@ export function GenericUncontrolledInput({
           type={type}
           placeholder={placeholder}
           ref={inputRef}
+          autoComplete="on"
         />
         {extractErrors(errors)}
       </label>
