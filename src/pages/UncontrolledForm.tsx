@@ -9,6 +9,7 @@ import { CheckBoxInput } from '../components/uncontrolledComponents/CheckBoxInpu
 import { TextInputAutocomplete } from '../components/uncontrolledComponents/TextInputAutocomplete';
 import { IFormDataOptional } from '../interfaces/IFormData';
 import { COUNTRIES } from '../constants';
+import { PasswordInput } from '../components/uncontrolledComponents/PasswordInput';
 
 type TFormInputErrors = Partial<Record<keyof IFormDataOptional, Array<string>>>;
 
@@ -103,21 +104,24 @@ export function UncontrolledForm() {
           errors={errors?.email}
           id="email"
           type="email"
-          placeholder="Input your email"
+          label="Input your email"
+          placeholder="someone@example.com"
           inputRef={emailInput}
         />
-        <GenericUncontrolledInput
+
+        <PasswordInput
           errors={errors?.password}
           id="password"
           type="password"
-          placeholder="Input your password"
+          label="Input your password"
           inputRef={passwordInput}
         />
+
         <GenericUncontrolledInput
           errors={errors?.passwordRepeat}
           id="password-repeat"
           type="password"
-          placeholder="Repeat your password"
+          label="Repeat your password"
           inputRef={passwordRepeatInput}
         />
 
@@ -125,7 +129,8 @@ export function UncontrolledForm() {
           errors={errors?.name}
           id="name"
           type="text"
-          placeholder="Input your name"
+          label="Input your name"
+          placeholder="Mark"
           inputRef={nameInput}
         />
 
@@ -133,7 +138,8 @@ export function UncontrolledForm() {
           errors={errors?.age}
           id="age"
           type="text"
-          placeholder="Input your age"
+          label="Input your age"
+          placeholder="18"
           inputRef={ageInput}
         />
 
@@ -146,6 +152,7 @@ export function UncontrolledForm() {
         />
 
         <TextInputAutocomplete
+          label="Choose your Country"
           errors={errors?.country}
           id="country"
           options={COUNTRIES.map((el) => el.name)}
