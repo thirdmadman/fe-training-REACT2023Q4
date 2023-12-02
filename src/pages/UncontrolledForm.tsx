@@ -1,12 +1,14 @@
 import { useRef, useState } from 'react';
 import { useAppDispatch } from '../redux/hooks';
 import { ISavedFormData, saveFormData } from '../redux/features/mainPageSlice';
-import { IFormDataOptional } from '../interfaces/IFormData';
 import { convertFileToBase64 } from '../utils/convertFileToBase64';
 import { GenericUncontrolledInput } from '../components/uncontrolledComponents/GenericUncotrolledInput';
 import { validateFormData } from '../utils/validateFormData';
 import { GenderInput } from '../components/uncontrolledComponents/GenderInput';
 import { CheckBoxInput } from '../components/uncontrolledComponents/CheckBoxInput';
+import { TextInputAutocomplete } from '../components/uncontrolledComponents/TextInputAutocomplete';
+import { IFormDataOptional } from '../interfaces/IFormData';
+import { COUNTRIES } from '../constants';
 
 type TFormInputErrors = Partial<Record<keyof IFormDataOptional, Array<string>>>;
 
@@ -143,11 +145,10 @@ export function UncontrolledForm() {
           inputRef={genderInput}
         />
 
-        <GenericUncontrolledInput
+        <TextInputAutocomplete
           errors={errors?.country}
           id="country"
-          type="text"
-          placeholder="Input your country"
+          options={COUNTRIES.map((el) => el.name)}
           inputRef={countryInput}
         />
 
