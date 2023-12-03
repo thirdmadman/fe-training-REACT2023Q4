@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { formDataSchema } from '../utils/formDataSchema';
 import { GenericInput } from '../components/hookComponents/GenericInput';
+import { GenericCheckBoxInput } from '../components/hookComponents/GenericCheckBoxInput';
 
 export function ReactHookForm() {
   const {
@@ -52,6 +53,24 @@ export function ReactHookForm() {
           type="text"
           label="Input your age"
           placeholder="18"
+        />
+
+        <GenericCheckBoxInput<'acceptTC'>
+          useFormRegisterReturn={register('acceptTC')}
+          label={
+            <>
+              I agree to the{' '}
+              <a
+                href="#"
+                className="text-blue-600 hover:underline dark:text-blue-500"
+              >
+                terms and conditions
+              </a>
+              .
+            </>
+          }
+          error={errors?.acceptTC?.message}
+          id="acceptTC"
         />
 
         <select {...register('gender', { required: true })}>
