@@ -75,7 +75,7 @@ export function UncontrolledForm() {
       setErrors(validate.errors);
     } else {
       dispatch(
-        saveFormData({ fromData: validate.formData, type: 'uncontrolled' })
+        saveFormData({ formData: validate.formData, type: 'uncontrolled' })
       );
     }
   };
@@ -175,6 +175,7 @@ export function UncontrolledForm() {
             type="file"
             ref={userPictureInput}
             accept=".png,.jpg,.jpeg"
+            onChange={(e) => console.log(e.currentTarget.files)}
           />
           {extractErrors(errors?.userPicture)}
           <div

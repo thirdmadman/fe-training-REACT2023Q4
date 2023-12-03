@@ -4,7 +4,7 @@ import { IFormData } from '../../interfaces/IFormData';
 export type TSavedFromType = 'uncontrolled' | 'react-hook';
 
 export interface ISavedFormData {
-  fromData: IFormData;
+  formData: IFormData;
   type: TSavedFromType;
 }
 
