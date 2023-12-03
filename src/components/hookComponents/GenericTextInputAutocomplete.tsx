@@ -1,24 +1,22 @@
 import { useEffect, useRef, useState } from 'react';
 import { InputAutocompleteList } from './InputAutocompleteList';
-import { UseFormRegisterReturn } from 'react-hook-form';
-
-interface IGenericTextInputAutocompleteProps<T extends string> {
-  useFormRegisterReturn: UseFormRegisterReturn<T>;
+interface IGenericTextInputAutocompleteProps {
+  triggerEvent: (value: string) => void;
   label?: string;
   options: Array<string>;
   error: string | undefined;
   id: string;
 }
 
-export function GenericTextInputAutocomplete<T extends string>({
+export function GenericTextInputAutocomplete({
   label,
   options,
   error,
   id,
-  useFormRegisterReturn,
-}: IGenericTextInputAutocompleteProps<T>) {
+  triggerEvent,
+}: IGenericTextInputAutocompleteProps) {
   const [isAutocompleteHidden, setIsAutocompleteHidden] = useState(true);
-  const [filterSting] = useState('');
+  const [filterSting, setFilterSting] = useState('');
 
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -96,7 +94,12 @@ export function GenericTextInputAutocomplete<T extends string>({
           ${isAutocompleteHidden ? '' : 'rounded-bl-none rounded-br-none'}`}
           autoComplete="off"
           onClick={() => setIsAutocompleteHidden(false)}
-          {...useFormRegisterReturn}
+          onChange={(e) => {
+            setFilterSting(e.target.value);
+            setIsAutocompleteHidden(false);
+            triggerEvent(e.target.value);
+          }}
+          ref={inputRef}
         />
         <InputAutocompleteList
           options={options}

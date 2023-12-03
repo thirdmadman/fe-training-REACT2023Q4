@@ -110,8 +110,8 @@ export function ReactHookForm() {
               placeholder="Input your gender"
             />
 
-            <GenericTextInputAutocomplete<'country'>
-              useFormRegisterReturn={register('country')}
+            <GenericTextInputAutocomplete
+              triggerEvent={(value: string) => setValue('country', value)}
               label="Choose your Country"
               error={errors?.country?.message}
               id="country"
