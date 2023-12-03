@@ -1,26 +1,58 @@
-import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { formDataSchema } from '../utils/formDataSchema';
 import { GenericInput } from '../components/hookComponents/GenericInput';
 import { GenericCheckBoxInput } from '../components/hookComponents/GenericCheckBoxInput';
 import { GenericPasswordInput } from '../components/hookComponents/GenericPasswordInput';
+import { GenericTextInputAutocomplete } from '../components/hookComponents/GenericTextInputAutocomplete';
+import { COUNTRIES } from '../constants';
+import { GenericGenderInput } from '../components/hookComponents/GenericGenderInput';
+import { IFormData } from '../interfaces/IFormData';
+import { saveFormData } from '../redux/features/mainPageSlice';
+import { useAppDispatch } from '../redux/hooks';
+import { convertFileToBase64 } from '../utils/convertFileToBase64';
 
 export function ReactHookForm() {
+  const dispatch = useAppDispatch();
+
   const {
     register,
     handleSubmit,
+    setValue,
+    trigger,
     formState: { errors },
   } = useForm({ resolver: yupResolver(formDataSchema), mode: 'onChange' });
-  const [data, setData] = useState('');
+
+  const processUserPicture = async (files: FileList | null) => {
+    let userPictureData: string | undefined;
+
+    if (files && files.length > 0) {
+      try {
+        const tmp = await convertFileToBase64(files[0]);
+        if (typeof tmp === 'string') {
+          userPictureData = tmp;
+          setValue('userPicture', userPictureData);
+          trigger('userPicture');
+          return;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  };
+
+  const onSubmitEvent = async (data: IFormData) => {
+    console.log('onSubmitEvent');
+    console.log('formData :>> ', data);
+    const formData = data;
+
+    dispatch(saveFormData({ formData: formData, type: 'uncontrolled' }));
+  };
 
   return (
     <>
       <div>ReactHookForm</div>
-      <form
-        className="max-w-sm mx-auto"
-        onSubmit={handleSubmit((data) => setData(JSON.stringify(data)))}
-      >
+      <form className="max-w-sm mx-auto" onSubmit={handleSubmit(onSubmitEvent)}>
         <GenericInput<'email'>
           useFormRegisterReturn={register('email')}
           error={errors?.email?.message}
@@ -64,6 +96,22 @@ export function ReactHookForm() {
           placeholder="18"
         />
 
+        <GenericGenderInput<'gender'>
+          useFormRegisterReturn={register('gender')}
+          error={errors?.gender?.message}
+          id="gender"
+          label="Select your gender"
+          placeholder="Input your gender"
+        />
+
+        <GenericTextInputAutocomplete<'country'>
+          useFormRegisterReturn={register('country')}
+          label="Choose your Country"
+          error={errors?.country?.message}
+          id="country"
+          options={COUNTRIES.map((el) => el.name)}
+        />
+
         <div className="mb-5">
           <label
             className="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
@@ -77,7 +125,7 @@ export function ReactHookForm() {
             id="user_avatar"
             type="file"
             accept=".png,.jpg,.jpeg"
-            {...register('userPicture')}
+            onChange={(e) => processUserPicture(e.currentTarget.files)}
           />
           <p className="mt-2 text-sm text-red-600 dark:text-red-500">
             {errors?.userPicture?.message}
@@ -108,8 +156,6 @@ export function ReactHookForm() {
           error={errors?.acceptTC?.message}
           id="acceptTC"
         />
-
-        <p>{data}</p>
 
         <button
           type="submit"
