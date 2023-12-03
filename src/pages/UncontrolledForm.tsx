@@ -69,12 +69,8 @@ export function UncontrolledForm() {
   };
 
   const onSubmitEvent = async () => {
-    console.log('onSubmitEvent');
     const formData = await extractFromData();
-    console.log('formData :>> ', formData);
-
     const validate = await validateFormData(formData);
-    console.log('validate :>> ', validate);
 
     if (validate.errors) {
       setErrors(validate.errors);
@@ -183,7 +179,6 @@ export function UncontrolledForm() {
                 type="file"
                 ref={userPictureInput}
                 accept=".png,.jpg,.jpeg"
-                onChange={(e) => console.log(e.currentTarget.files)}
               />
               {extractErrors(errors?.userPicture)}
               <div
