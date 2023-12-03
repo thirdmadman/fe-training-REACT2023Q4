@@ -13,11 +13,13 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { convertFileToBase64 } from '../utils/convertFileToBase64';
 import { Footer } from '../components/shared/Footer';
 import { Header } from '../components/shared/Header';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 export function ReactHookForm() {
   const dispatch = useAppDispatch();
   const countries = useAppSelector((store) => store.countries.countries);
+
+  const navigate = useNavigate();
 
   const {
     register,
@@ -47,6 +49,7 @@ export function ReactHookForm() {
 
   const onSubmitEvent = async (data: IFormData) => {
     dispatch(saveFormData({ formData: data, type: 'react-hook' }));
+    navigate(ROUTE_MAIN);
   };
 
   return (

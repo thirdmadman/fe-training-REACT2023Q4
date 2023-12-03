@@ -12,7 +12,7 @@ import { ROUTE_MAIN } from '../constants';
 import { PasswordInput } from '../components/uncontrolledComponents/PasswordInput';
 import { Header } from '../components/shared/Header';
 import { Footer } from '../components/shared/Footer';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 type TFormInputErrors = Partial<Record<keyof IFormDataOptional, Array<string>>>;
 
@@ -28,6 +28,8 @@ export function UncontrolledForm() {
   const userPictureInput = useRef<HTMLInputElement>(null);
 
   const dispatch = useAppDispatch();
+
+  const navigate = useNavigate();
 
   const countries = useAppSelector((store) => store.countries.countries);
 
@@ -78,6 +80,7 @@ export function UncontrolledForm() {
       dispatch(
         saveFormData({ formData: validate.formData, type: 'uncontrolled' })
       );
+      navigate(ROUTE_MAIN);
     }
   };
 
