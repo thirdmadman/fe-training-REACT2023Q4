@@ -45,11 +45,7 @@ export function ReactHookForm() {
   };
 
   const onSubmitEvent = async (data: IFormData) => {
-    console.log('onSubmitEvent');
-    console.log('formData :>> ', data);
-    const formData = data;
-
-    dispatch(saveFormData({ formData: formData, type: 'uncontrolled' }));
+    dispatch(saveFormData({ formData: data, type: 'react-hook' }));
   };
 
   return (
