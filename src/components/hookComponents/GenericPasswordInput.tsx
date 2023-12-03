@@ -1,8 +1,9 @@
 import { HTMLInputTypeAttribute, useState } from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
 
-interface IGenericPasswordInputProps<T extends string> {
-  useFormRegisterReturn: UseFormRegisterReturn<T>;
+import { calculatePasswordStrength } from '../../utils/calculatePasswordStrength';
+
+interface IGenericPasswordInputProps {
+  triggerEvent: (value: string) => void;
   label?: string;
   error: string | undefined;
   id: string;
@@ -10,15 +11,15 @@ interface IGenericPasswordInputProps<T extends string> {
   placeholder?: string;
 }
 
-export function GenericPasswordInput<T extends string>({
+export function GenericPasswordInput({
   label,
   error,
   id,
   type,
   placeholder,
-  useFormRegisterReturn,
-}: IGenericPasswordInputProps<T>) {
-  const [passwordStrength] = useState<number | null>(null);
+  triggerEvent,
+}: IGenericPasswordInputProps) {
+  const [passwordStrength, setPasswordStrength] = useState<number | null>(null);
 
   const extractErrors = (error: string | undefined) => {
     if (!error || !(error.length > 0)) {
@@ -53,7 +54,10 @@ export function GenericPasswordInput<T extends string>({
           type={type}
           placeholder={placeholder}
           autoComplete="on"
-          {...useFormRegisterReturn}
+          onChange={(e) => {
+            setPasswordStrength(calculatePasswordStrength(e.target.value));
+            triggerEvent(e.target.value);
+          }}
         />
         <p
           className={

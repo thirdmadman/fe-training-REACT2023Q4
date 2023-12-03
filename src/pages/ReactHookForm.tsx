@@ -68,8 +68,11 @@ export function ReactHookForm() {
               placeholder="someone@example.com"
             />
 
-            <GenericPasswordInput<'password'>
-              useFormRegisterReturn={register('password')}
+            <GenericPasswordInput
+              triggerEvent={(value: string) => {
+                setValue('password', value);
+                trigger('password');
+              }}
               error={errors?.password?.message}
               id="password"
               type="password"
