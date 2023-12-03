@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { saveFormData } from '../redux/features/mainPageSlice';
 import { convertFileToBase64 } from '../utils/convertFileToBase64';
 import { GenericUncontrolledInput } from '../components/uncontrolledComponents/GenericUncotrolledInput';
@@ -8,7 +8,7 @@ import { GenderInput } from '../components/uncontrolledComponents/GenderInput';
 import { CheckBoxInput } from '../components/uncontrolledComponents/CheckBoxInput';
 import { TextInputAutocomplete } from '../components/uncontrolledComponents/TextInputAutocomplete';
 import { IFormDataOptional } from '../interfaces/IFormData';
-import { COUNTRIES, ROUTE_MAIN } from '../constants';
+import { ROUTE_MAIN } from '../constants';
 import { PasswordInput } from '../components/uncontrolledComponents/PasswordInput';
 import { Header } from '../components/shared/Header';
 import { Footer } from '../components/shared/Footer';
@@ -28,6 +28,8 @@ export function UncontrolledForm() {
   const userPictureInput = useRef<HTMLInputElement>(null);
 
   const dispatch = useAppDispatch();
+
+  const countries = useAppSelector((store) => store.countries.countries);
 
   const [errors, setErrors] = useState<TFormInputErrors | null>(null);
 
@@ -163,7 +165,7 @@ export function UncontrolledForm() {
               label="Choose your Country"
               errors={errors?.country}
               id="country"
-              options={COUNTRIES.map((el) => el.name)}
+              options={countries.map((el) => el.name)}
               inputRef={countryInput}
             />
 

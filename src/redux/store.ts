@@ -5,9 +5,11 @@ import {
 } from '@reduxjs/toolkit';
 
 import mainPageReducer, { mainPageSlice } from './features/mainPageSlice';
+import countriesReducer, { countriesSlice } from './features/countriesSlice';
 
 const reducers = {
   [mainPageSlice.name]: mainPageReducer,
+  [countriesSlice.name]: countriesReducer,
 };
 
 const combinedReducer = combineReducers<typeof reducers>(reducers);

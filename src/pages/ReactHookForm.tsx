@@ -5,11 +5,11 @@ import { GenericInput } from '../components/hookComponents/GenericInput';
 import { GenericCheckBoxInput } from '../components/hookComponents/GenericCheckBoxInput';
 import { GenericPasswordInput } from '../components/hookComponents/GenericPasswordInput';
 import { GenericTextInputAutocomplete } from '../components/hookComponents/GenericTextInputAutocomplete';
-import { COUNTRIES, ROUTE_MAIN } from '../constants';
+import { ROUTE_MAIN } from '../constants';
 import { GenericGenderInput } from '../components/hookComponents/GenericGenderInput';
 import { IFormData } from '../interfaces/IFormData';
 import { saveFormData } from '../redux/features/mainPageSlice';
-import { useAppDispatch } from '../redux/hooks';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { convertFileToBase64 } from '../utils/convertFileToBase64';
 import { Footer } from '../components/shared/Footer';
 import { Header } from '../components/shared/Header';
@@ -17,6 +17,7 @@ import { Link } from 'react-router-dom';
 
 export function ReactHookForm() {
   const dispatch = useAppDispatch();
+  const countries = useAppSelector((store) => store.countries.countries);
 
   const {
     register,
@@ -114,7 +115,7 @@ export function ReactHookForm() {
               label="Choose your Country"
               error={errors?.country?.message}
               id="country"
-              options={COUNTRIES.map((el) => el.name)}
+              options={countries.map((el) => el.name)}
             />
 
             <div className="mb-5">
