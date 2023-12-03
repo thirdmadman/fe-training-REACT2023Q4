@@ -8,8 +8,19 @@ export const formDataSchema = object().shape({
       message: '${path} must starts from capital letter',
       test: (value) => !!value[0] && value[0].toUpperCase() === value[0],
     }),
-  age: number().label('Age').required().positive().integer(),
-  gender: string().label('Gender').required(),
+  age: number()
+    .typeError('${path} must be a number')
+    .label('Age')
+    .required()
+    .integer()
+    .positive(),
+  gender: string()
+    .label('Gender')
+    .required()
+    .test({
+      message: '${path} is required field',
+      test: (value) => value !== 'null',
+    }),
   country: string().label('Country').required(),
   email: string().label('Email').required().email(),
   password: string()
