@@ -1,4 +1,4 @@
-export const APP_TITLE = 'thirdmadman\'s app';
+export const APP_TITLE = 'thirdmadman\'s app - react forms';
 
 export const ROUTE_MAIN = '/';
 export const ROUTE_UNCONTROLLED_FORM = '/uncontrolled-form';
